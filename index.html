@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrepReady — Personal Emergency Kit Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f0e;
+  --bg2: #111413;
+  --surface: #161918;
+  --surface2: #1e2220;
+  --surface3: #242826;
+  --border: #2a2e2c;
+  --border2: #353a37;
+  --accent: #c8f060;
+  --accent2: #60f0c8;
+  --danger: #f06060;
+  --warn: #f0b860;
+  --text: #e8ede9;
+  --text2: #b8c4ba;
+  --muted: #6a7a6e;
+  --font-d: 'Syne', sans-serif;
+  --font-b: 'Instrument Sans', sans-serif;
+  --radius: 14px;
+  --transition: 0.2s ease;
+}
+[data-theme="light"] {
+  --bg: #f4f6f3;
+  --bg2: #eef0ec;
+  --surface: #ffffff;
+  --surface2: #f0f2ee;
+  --surface3: #e8ebe6;
+  --border: #d8dcd6;
+  --border2: #c8cdc5;
+  --accent: #5a8a00;
+  --accent2: #007a60;
+  --danger: #cc3030;
+  --warn: #b06000;
+  --text: #1a1f1b;
+  --text2: #3a4a3d;
+  --muted: #7a8a7e;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
+
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(200,240,96,0.05) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(96,240,200,0.03) 0%,transparent 60%);pointer-events:none;z-index:0;}
+[data-theme="light"] body::before{opacity:0.4;}
+
+.wrap{max-width:740px;margin:0 auto;padding:0 20px;position:relative;z-index:1;}
+
+/* ── HEADER ── */
+header{padding:24px 0 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);margin-bottom:40px;gap:12px;flex-wrap:wrap;}
+.logo{font-family:var(--font-d);font-weight:800;font-size:1.35rem;letter-spacing:-0.02em;}
+.logo span{color:var(--accent);}
+.header-controls{display:flex;gap:8px;align-items:center;}
+.ctrl-group{display:flex;gap:3px;background:var(--surface2);border-radius:8px;padding:3px;}
+.ctrl-btn{background:none;border:none;color:var(--muted);font-family:var(--font-b);font-size:0.78rem;font-weight:500;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all 0.2s;}
+.ctrl-btn.active{background:var(--accent);color:var(--bg);}
+.theme-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;cursor:pointer;color:var(--text);font-size:0.9rem;transition:all 0.2s;}
+.theme-btn:hover{border-color:var(--accent);}
+
+/* ── HERO ── */
+.hero{margin-bottom:48px;}
+.eyebrow{font-size:0.72rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--accent);}
+.hero h1{font-family:var(--font-d);font-weight:800;font-size:clamp(2rem,6vw,3.2rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:16px;}
+.hero h1 em{font-style:normal;color:var(--accent);}
+.hero p{font-size:1rem;line-height:1.7;color:var(--muted);max-width:500px;}
+
+/* ── PROGRESS TRACK ── */
+.prog-track{display:flex;gap:5px;margin-bottom:36px;}
+.prog-step{height:3px;flex:1;background:var(--border);border-radius:2px;transition:background 0.4s;}
+.prog-step.done{background:var(--accent);}
+.prog-step.cur{background:var(--accent);opacity:0.45;}
+
+/* ── STEPS ── */
+.step{display:none;animation:fadeUp 0.35s ease forwards;}
+.step.on{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+.step-lbl{font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.step-title{font-family:var(--font-d);font-weight:700;font-size:1.4rem;letter-spacing:-0.02em;margin-bottom:24px;line-height:1.2;}
+.step-subtitle{font-family:var(--font-d);font-weight:700;font-size:1.05rem;margin-bottom:14px;margin-top:20px;}
+
+/* ── COUNTER ── */
+.counter-row{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
+.cnt-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.cnt-btn:hover{border-color:var(--accent);color:var(--accent);}
+.cnt-num{font-family:var(--font-d);font-size:2.4rem;font-weight:800;color:var(--accent);min-width:44px;text-align:center;}
+.cnt-lbl{color:var(--muted);font-size:0.88rem;}
+
+/* ── AGE GROUPS ── */
+.age-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
+.age-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:10px;}
+.age-icon{font-size:1.3rem;}
+.age-info{flex:1;}
+.age-info label{display:block;font-size:0.82rem;font-weight:500;margin-bottom:6px;}
+.age-ctrl{display:flex;align-items:center;gap:8px;}
+.age-ctrl button{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.age-ctrl button:hover{border-color:var(--accent);color:var(--accent);}
+.age-ctrl span{font-family:var(--font-d);font-weight:700;font-size:0.95rem;min-width:18px;text-align:center;color:var(--accent);}
+
+/* ── THREATS ── */
+.threat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
+.t-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all 0.2s;position:relative;}
+.t-card.sel{border-color:var(--accent);background:rgba(200,240,96,0.05);}
+.t-check{position:absolute;top:10px;right:10px;width:17px;height:17px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.55rem;transition:all 0.2s;}
+.t-card.sel .t-check{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.t-icon{font-size:1.6rem;margin-bottom:8px;}
+.t-name{font-family:var(--font-d);font-weight:700;font-size:0.88rem;margin-bottom:3px;}
+.t-desc{font-size:0.72rem;color:var(--muted);line-height:1.4;}
+
+/* ── NEEDS ── */
+.needs-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:24px;}
+.need-chip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:9px;font-size:0.86rem;}
+.need-chip.sel{border-color:var(--accent2);background:rgba(96,240,200,0.06);color:var(--accent2);}
+.need-icon{font-size:1rem;}
+
+/* ── DURATION ── */
+.dur-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px;}
+.dur-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 16px;cursor:pointer;font-family:var(--font-b);font-size:0.88rem;color:var(--text);transition:all 0.2s;}
+.dur-btn.sel{border-color:var(--accent);background:rgba(200,240,96,0.08);color:var(--accent);}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-bottom:24px;}
+.info-box p{font-size:0.8rem;color:var(--muted);line-height:1.6;}
+
+/* ── NAV BUTTONS ── */
+.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
+.btn-back{background:none;border:1px solid var(--border);border-radius:8px;padding:11px 18px;color:var(--muted);font-family:var(--font-b);font-size:0.88rem;cursor:pointer;transition:all 0.2s;}
+.btn-back:hover{border-color:var(--muted);color:var(--text);}
+.btn-next{background:var(--accent);border:none;border-radius:8px;padding:11px 26px;color:var(--bg);font-family:var(--font-d);font-size:0.92rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:7px;}
+.btn-next:hover{filter:brightness(1.08);transform:translateY(-1px);}
+
+/* ── RESULTS ── */
+.result-head{margin-bottom:28px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.meta-tag{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 11px;font-size:0.76rem;color:var(--muted);}
+.meta-tag strong{color:var(--text);}
+
+/* ── PROGRESS RING ── */
+.prog-summary{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;display:flex;align-items:center;gap:18px;margin-bottom:22px;}
+.ring-wrap{position:relative;width:60px;height:60px;flex-shrink:0;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:var(--border);stroke-width:4;}
+.ring-fill{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 0.6s ease;}
+.ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:800;font-size:0.8rem;color:var(--accent);}
+.prog-txt h3{font-family:var(--font-d);font-weight:700;font-size:0.95rem;margin-bottom:3px;}
+.prog-txt p{font-size:0.8rem;color:var(--muted);}
+
+/* ── ACTION BUTTONS ── */
+.action-row{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+.act-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:var(--font-b);font-size:0.82rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.act-btn:hover{border-color:var(--accent);color:var(--accent);}
+.act-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600;}
+.act-btn.primary:hover{filter:brightness(1.08);color:var(--bg);}
+
+/* ── CATEGORY BLOCK ── */
+.cat-block{margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color 0.2s;}
+.cat-head{padding:13px 18px;display:flex;align-items:center;gap:10px;background:var(--surface2);cursor:pointer;user-select:none;transition:background 0.15s;}
+.cat-head:hover{background:var(--surface3);}
+.cat-icon{font-size:1.1rem;}
+.cat-name{font-family:var(--font-d);font-weight:700;font-size:0.9rem;flex:1;}
+.cat-badge{font-size:0.72rem;color:var(--muted);background:var(--bg2);border-radius:20px;padding:2px 9px;}
+.cat-chevron{font-size:0.75rem;color:var(--muted);transition:transform 0.25s;}
+.cat-block.collapsed .cat-chevron{transform:rotate(-90deg);}
+.cat-body{border-top:1px solid var(--border);}
+.cat-block.collapsed .cat-body{display:none;}
+
+/* ── ITEM STATES ── */
+.item-row{display:flex;align-items:flex-start;gap:10px;padding:10px 18px;cursor:pointer;transition:background 0.12s;position:relative;}
+.item-row:hover{background:rgba(255,255,255,0.02);}
+[data-theme="light"] .item-row:hover{background:rgba(0,0,0,0.02);}
+.item-row+.item-row{border-top:1px solid var(--border);}
+
+/* State toggle button */
+.state-btn{width:26px;height:26px;border-radius:6px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;transition:all 0.15s;background:var(--surface2);cursor:pointer;}
+.state-btn.need{border-color:var(--warn);background:rgba(240,184,96,0.1);color:var(--warn);}
+.state-btn.have{border-color:var(--accent);background:rgba(200,240,96,0.12);color:var(--accent);}
+.item-row.need-buy .item-name::before{content:'🛒 ';font-size:0.75em;}
+.item-row.is-have{opacity:0.55;}
+
+.item-body{flex:1;min-width:0;}
+.item-name{font-size:0.88rem;font-weight:500;margin-bottom:2px;line-height:1.4;}
+.item-note{font-size:0.73rem;color:var(--muted);}
+.priority-high .item-name::after{content:' ●';color:var(--danger);font-size:0.45rem;vertical-align:middle;}
+
+/* Expiry */
+.item-expiry-row{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.expiry-label{font-size:0.68rem;color:var(--muted);}
+.expiry-input{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:3px 7px;font-size:0.72rem;color:var(--text);font-family:var(--font-b);outline:none;transition:border-color 0.2s;width:130px;}
+.expiry-input:focus{border-color:var(--accent);}
+.expiry-badge{font-size:0.68rem;padding:2px 7px;border-radius:10px;font-weight:600;}
+.exp-ok{background:rgba(200,240,96,0.1);color:var(--accent);}
+.exp-warn{background:rgba(240,184,96,0.12);color:var(--warn);}
+.exp-danger{background:rgba(240,96,96,0.12);color:var(--danger);}
+
+/* Info tooltip */
+.info-trigger{font-size:0.65rem;color:var(--muted);border:1px solid var(--border);border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:2px;transition:all 0.15s;}
+.info-trigger:hover{border-color:var(--accent2);color:var(--accent2);}
+.info-popup{display:none;position:absolute;right:50px;top:8px;background:var(--surface3);border:1px solid var(--border2);border-radius:10px;padding:10px 13px;font-size:0.76rem;line-height:1.5;color:var(--text2);max-width:220px;z-index:10;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.info-trigger:focus+.info-popup,.info-trigger.open+.info-popup{display:block;}
+
+/* ── CUSTOM ITEMS ── */
+.add-custom{display:flex;gap:8px;padding:10px 18px;border-top:1px solid var(--border);}
+.custom-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;color:var(--text);font-family:var(--font-b);font-size:0.85rem;outline:none;transition:border-color 0.2s;}
+.custom-input:focus{border-color:var(--accent);}
+.custom-input::placeholder{color:var(--muted);}
+.add-btn{background:var(--accent);border:none;border-radius:7px;padding:7px 14px;color:var(--bg);font-family:var(--font-d);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.add-btn:hover{filter:brightness(1.08);}
+
+/* ── SHOPPING LIST VIEW ── */
+.shop-toggle{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.shop-toggle h3{font-family:var(--font-d);font-weight:700;font-size:0.95rem;display:flex;align-items:center;gap:8px;}
+.shop-list{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+.shop-list.on{display:block;}
+.shop-item{font-size:0.85rem;padding:5px 0;border-bottom:1px solid var(--border);color:var(--text2);}
+.shop-item:last-child{border:none;}
+.shop-empty{color:var(--muted);font-size:0.82rem;font-style:italic;}
+
+/* ── EMERGENCY CARD ── */
+.ec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:22px;}
+.ec-card h3{font-family:var(--font-d);font-weight:700;font-size:0.95rem;margin-bottom:16px;display:flex;align-items:center;gap:7px;}
+.ec-row{display:flex;gap:8px;margin-bottom:7px;align-items:center;}
+.ec-lbl{font-size:0.74rem;color:var(--muted);width:140px;flex-shrink:0;}
+.ec-inp{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:var(--font-b);font-size:0.83rem;outline:none;transition:border-color 0.2s;}
+.ec-inp:focus{border-color:var(--accent);}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:20px 0 36px;margin-top:36px;}
+.foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+footer p{font-size:0.76rem;color:var(--muted);}
+footer a{color:var(--accent);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--surface3);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:0.78rem;color:var(--accent);opacity:0;transform:translateY(8px);transition:all 0.3s;z-index:100;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.on{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:24px;max-width:440px;width:100%;animation:fadeUp 0.25s ease;}
+.modal h3{font-family:var(--font-d);font-weight:700;font-size:1.1rem;margin-bottom:8px;}
+.modal p{font-size:0.84rem;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.modal textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:monospace;font-size:0.75rem;height:120px;resize:none;outline:none;margin-bottom:14px;}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;}
+.modal-btn{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 16px;color:var(--text);font-family:var(--font-b);font-size:0.85rem;cursor:pointer;transition:all 0.2s;}
+.modal-btn:hover{border-color:var(--accent);color:var(--accent);}
+.modal-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600;}
+.modal-btn.primary:hover{filter:brightness(1.08);color:var(--bg);}
+
+@media(max-width:480px){
+  .threat-grid,.age-grid,.needs-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:1.9rem;}
+  .action-row{gap:6px;}
+  .act-btn{font-size:0.78rem;padding:8px 11px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div class="logo">Prep<span>Ready</span></div>
+  <div class="header-controls">
+    <div class="ctrl-group">
+      <button class="ctrl-btn active" onclick="setLang('en')">EN</button>
+      <button class="ctrl-btn" onclick="setLang('zh')">繁中</button>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <div class="eyebrow" data-i18n="eyebrow">Free · Personal · Always Ready</div>
+  <h1 data-i18n="h1">Be ready<br>before the<br><em>unexpected.</em></h1>
+  <p data-i18n="heroP">Answer 4 quick questions. Get a personalised emergency checklist tailored to your household — for natural disasters, conflict, or infrastructure failure.</p>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="prog-track" id="progTrack" style="display:none">
+  <div class="prog-step" id="ps1"></div>
+  <div class="prog-step" id="ps2"></div>
+  <div class="prog-step" id="ps3"></div>
+  <div class="prog-step" id="ps4"></div>
+</div>
+
+<!-- ════ STEP 1 ════ -->
+<div class="step on" id="s1">
+  <div class="step-lbl" data-i18n="s1lbl">Step 1 of 4</div>
+  <div class="step-title" data-i18n="s1title">How many people in your household?</div>
+  <div class="counter-row">
+    <button class="cnt-btn" onclick="adjCount(-1)">−</button>
+    <div class="cnt-num" id="memberNum">2</div>
+    <button class="cnt-btn" onclick="adjCount(1)">+</button>
+    <span class="cnt-lbl" data-i18n="people">people</span>
+  </div>
+  <div class="step-subtitle" data-i18n="whoTitle">Who's in your household?</div>
+  <div class="age-grid">
+    <div class="age-card"><div class="age-icon">👶</div><div class="age-info"><label data-i18n="infant">Infant (0–2)</label><div class="age-ctrl"><button onclick="adjAge('infant',-1)">−</button><span id="a-infant">0</span><button onclick="adjAge('infant',1)">+</button></div></div></div>
+    <div class="age-card"><div class="age-icon">🧒</div><div class="age-info"><label data-i18n="child">Child (3–12)</label><div class="age-ctrl"><button onclick="adjAge('child',-1)">−</button><span id="a-child">0</span><button onclick="adjAge('child',1)">+</button></div></div></div>
+    <div class="age-card"><div class="age-icon">🧑</div><div class="age-info"><label data-i18n="adult">Adult (13–64)</label><div class="age-ctrl"><button onclick="adjAge('adult',-1)">−</button><span id="a-adult">2</span><button onclick="adjAge('adult',1)">+</button></div></div></div>
+    <div class="age-card"><div class="age-icon">🧓</div><div class="age-info"><label data-i18n="elder">Elder (65+)</label><div class="age-ctrl"><button onclick="adjAge('elder',-1)">−</button><span id="a-elder">0</span><button onclick="adjAge('elder',1)">+</button></div></div></div>
+  </div>
+  <div class="step-nav"><div></div><button class="btn-next" onclick="goStep(2)"><span data-i18n="next">Next</span> →</button></div>
+</div>
+
+<!-- ════ STEP 2 ════ -->
+<div class="step" id="s2">
+  <div class="step-lbl" data-i18n="s2lbl">Step 2 of 4</div>
+  <div class="step-title" data-i18n="s2title">What threats concern you most?</div>
+  <div class="threat-grid">
+    <div class="t-card" onclick="togThreat('natural')" id="t-natural"><div class="t-check">✓</div><div class="t-icon">🌊</div><div class="t-name" data-i18n="tNat">Natural Disaster</div><div class="t-desc" data-i18n="tNatD">Earthquake, flood, typhoon, wildfire</div></div>
+    <div class="t-card" onclick="togThreat('conflict')" id="t-conflict"><div class="t-check">✓</div><div class="t-icon">⚠️</div><div class="t-name" data-i18n="tCon">Armed Conflict</div><div class="t-desc" data-i18n="tConD">War, civil unrest, evacuation orders</div></div>
+    <div class="t-card" onclick="togThreat('infra')" id="t-infra"><div class="t-check">✓</div><div class="t-icon">🔌</div><div class="t-name" data-i18n="tInf">Infrastructure Failure</div><div class="t-desc" data-i18n="tInfD">Power grid, water supply, internet outage</div></div>
+    <div class="t-card" onclick="togThreat('pandemic')" id="t-pandemic"><div class="t-check">✓</div><div class="t-icon">🦠</div><div class="t-name" data-i18n="tPan">Pandemic / Quarantine</div><div class="t-desc" data-i18n="tPanD">Disease outbreak, lockdown, isolation</div></div>
+  </div>
+  <div class="step-nav"><button class="btn-back" onclick="goStep(1)" data-i18n="back">← Back</button><button class="btn-next" onclick="goStep(3)"><span data-i18n="next">Next</span> →</button></div>
+</div>
+
+<!-- ════ STEP 3 ════ -->
+<div class="step" id="s3">
+  <div class="step-lbl" data-i18n="s3lbl">Step 3 of 4</div>
+  <div class="step-title" data-i18n="s3title">Any special considerations?</div>
+  <div class="needs-grid">
+    <div class="need-chip" onclick="togNeed('chronic')" id="n-chronic"><span class="need-icon">💊</span><span data-i18n="nChr">Chronic medication</span></div>
+    <div class="need-chip" onclick="togNeed('mobility')" id="n-mobility"><span class="need-icon">♿</span><span data-i18n="nMob">Mobility limitations</span></div>
+    <div class="need-chip" onclick="togNeed('pet')" id="n-pet"><span class="need-icon">🐾</span><span data-i18n="nPet">Pets</span></div>
+    <div class="need-chip" onclick="togNeed('diet')" id="n-diet"><span class="need-icon">🥗</span><span data-i18n="nDiet">Dietary restrictions</span></div>
+    <div class="need-chip" onclick="togNeed('baby')" id="n-baby"><span class="need-icon">🍼</span><span data-i18n="nBaby">Baby supplies</span></div>
+    <div class="need-chip" onclick="togNeed('none')" id="n-none"><span class="need-icon">✓</span><span data-i18n="nNone">None of the above</span></div>
+  </div>
+  <div class="step-nav"><button class="btn-back" onclick="goStep(2)" data-i18n="back">← Back</button><button class="btn-next" onclick="goStep(4)"><span data-i18n="next">Next</span> →</button></div>
+</div>
+
+<!-- ════ STEP 4 ════ -->
+<div class="step" id="s4">
+  <div class="step-lbl" data-i18n="s4lbl">Step 4 of 4</div>
+  <div class="step-title" data-i18n="s4title">How long do you want to prepare for?</div>
+  <div class="dur-row">
+    <button class="dur-btn" onclick="setDur(3)" id="d-3" data-i18n="d3">72 hours (minimum)</button>
+    <button class="dur-btn sel" onclick="setDur(7)" id="d-7" data-i18n="d7">1 week (recommended)</button>
+    <button class="dur-btn" onclick="setDur(30)" id="d-30" data-i18n="d30">1 month (advanced)</button>
+  </div>
+  <div class="info-box"><p data-i18n="durNote">Most governments recommend a minimum of 72 hours. In conflict or infrastructure scenarios, 1–2 weeks is more realistic.</p></div>
+  <div class="step-nav"><button class="btn-back" onclick="goStep(3)" data-i18n="back">← Back</button><button class="btn-next" onclick="buildResult()"><span data-i18n="generate">Generate My List</span> ✓</button></div>
+</div>
+
+<!-- ════ RESULTS ════ -->
+<div class="step" id="sResult">
+  <div class="result-head">
+    <div class="step-lbl" data-i18n="resLbl">Your personalised checklist</div>
+    <div class="step-title" data-i18n="resTitle">Emergency Prep List</div>
+    <div class="meta-row" id="metaRow"></div>
+  </div>
+
+  <div class="prog-summary">
+    <div class="ring-wrap"><svg width="60" height="60" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="26"/><circle class="ring-fill" id="ringFill" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/></svg><div class="ring-num" id="ringNum">0%</div></div>
+    <div class="prog-txt"><h3 data-i18n="progTitle">Preparation Progress</h3><p id="progDesc"></p></div>
+  </div>
+
+  <div class="action-row">
+    <button class="act-btn primary" onclick="window.print()" data-i18n="print">🖨 Print</button>
+    <button class="act-btn" onclick="shareList()" data-i18n="share">📤 Share</button>
+    <button class="act-btn" onclick="exportData()" data-i18n="export">💾 Export</button>
+    <button class="act-btn" onclick="showImport()" data-i18n="import">📂 Import</button>
+    <button class="act-btn" onclick="downloadICS()" data-i18n="remind">📅 Reminder</button>
+    <button class="act-btn" onclick="resetAll()" data-i18n="restart">↺ Restart</button>
+  </div>
+
+  <!-- Shopping list summary -->
+  <div class="shop-toggle" onclick="toggleShop()" id="shopToggle">
+    <h3>🛒 <span data-i18n="shopTitle">Shopping List</span> <span id="shopCount" style="color:var(--warn);font-size:0.85rem"></span></h3>
+    <span style="color:var(--muted);font-size:0.8rem" id="shopChevron">▼</span>
+  </div>
+  <div class="shop-list" id="shopList"></div>
+
+  <div id="checklistOut"></div>
+
+  <!-- Emergency contact card -->
+  <div class="ec-card">
+    <h3>📋 <span data-i18n="ecTitle">Emergency Contact Card</span></h3>
+    <div class="ec-row"><span class="ec-lbl" data-i18n="ec1">Local emergency:</span><input class="ec-inp" id="ec1" type="text" placeholder="999 / 112 / 110"></div>
+    <div class="ec-row"><span class="ec-lbl" data-i18n="ec2">Meeting point:</span><input class="ec-inp" id="ec2" type="text" placeholder="e.g. Park gate on Main St"></div>
+    <div class="ec-row"><span class="ec-lbl" data-i18n="ec3">Out-of-area contact:</span><input class="ec-inp" id="ec3" type="text" placeholder="Name + number"></div>
+    <div class="ec-row"><span class="ec-lbl" data-i18n="ec4">Evacuation route:</span><input class="ec-inp" id="ec4" type="text" placeholder="Primary + backup route"></div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <div class="wrap"><div class="foot-inner">
+    <p data-i18n="footLeft">PrepReady is free for everyone. No data leaves your device.</p>
+    <p>© 2026 <a href="https://billionstudio.co.uk" target="_blank">Billion Studio</a> · PrepReady v2.0</p>
+  </div></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- Export/Import Modal -->
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal">
+    <h3 id="modalTitle">Backup Data</h3>
+    <p id="modalDesc">Copy this code to save your progress. Paste it back using Import to restore.</p>
+    <textarea id="modalTA" spellcheck="false"></textarea>
+    <div class="modal-btns">
+      <button class="modal-btn" onclick="closeModal()">Close</button>
+      <button class="modal-btn primary" id="modalAction">Copy</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let lang = 'en';
+let theme = 'dark';
+let curStep = 1;
+let shopOpen = false;
+
+let ST = {
+  members: 2,
+  ages: { infant:0, child:0, adult:2, elder:0 },
+  threats: [],
+  needs: [],
+  duration: 7
+};
+
+// Item states: 0=not ready, 1=need to buy, 2=have it
+let itemStates = {};   // key -> 0|1|2
+let itemExpiry = {};   // key -> date string
+let customItems = {};  // catIdx -> [{name,key}]
+
+// ═══════════════════════════════════════════════════════
+// i18n
+// ═══════════════════════════════════════════════════════
+const T = {
+en:{
+  eyebrow:'Free · Personal · Always Ready',
+  h1:'Be ready<br>before the<br><em>unexpected.</em>',
+  heroP:'Answer 4 quick questions. Get a personalised emergency checklist tailored to your household — for natural disasters, conflict, or infrastructure failure.',
+  s1lbl:'Step 1 of 4',s2lbl:'Step 2 of 4',s3lbl:'Step 3 of 4',s4lbl:'Step 4 of 4',
+  s1title:'How many people in your household?',
+  s2title:'What threats concern you most?',
+  s3title:'Any special considerations?',
+  s4title:'How long do you want to prepare for?',
+  whoTitle:"Who's in your household?",
+  people:'people',
+  infant:'Infant (0–2)',child:'Child (3–12)',adult:'Adult (13–64)',elder:'Elder (65+)',
+  tNat:'Natural Disaster',tNatD:'Earthquake, flood, typhoon, wildfire',
+  tCon:'Armed Conflict',tConD:'War, civil unrest, evacuation orders',
+  tInf:'Infrastructure Failure',tInfD:'Power grid, water supply, internet outage',
+  tPan:'Pandemic / Quarantine',tPanD:'Disease outbreak, lockdown, isolation',
+  nChr:'Chronic medication',nMob:'Mobility limitations',nPet:'Pets',
+  nDiet:'Dietary restrictions',nBaby:'Baby supplies',nNone:'None of the above',
+  d3:'72 hours (minimum)',d7:'1 week (recommended)',d30:'1 month (advanced)',
+  durNote:'Most governments recommend a minimum of 72 hours. In conflict or infrastructure scenarios, 1–2 weeks is more realistic.',
+  next:'Next',back:'← Back',generate:'Generate My List',
+  resLbl:'Your personalised checklist',resTitle:'Emergency Prep List',
+  progTitle:'Preparation Progress',
+  print:'🖨 Print',share:'📤 Share',export:'💾 Export',import:'📂 Import',remind:'📅 Reminder',restart:'↺ Restart',
+  shopTitle:'Shopping List',
+  ecTitle:'Emergency Contact Card',
+  ec1:'Local emergency:',ec2:'Meeting point:',ec3:'Out-of-area contact:',ec4:'Evacuation route:',
+  footLeft:'PrepReady is free for everyone. No data leaves your device.',
+  checkedOf:'checked of',items:'items',
+  expiryLbl:'Expires:',
+  addItem:'+ Add item',addPlaceholder:'Add custom item...',
+  stateLabels:['○','🛒','✓'],
+  shopEmpty:'No items marked "need to buy" yet.',
+  collapseAll:'Collapse all',expandAll:'Expand all',
+  toastSaved:'✓ Progress saved',toastCopied:'✓ Copied!',toastShared:'✓ Shared!',toastImported:'✓ Imported!',
+  modalExportTitle:'Backup Code',modalExportDesc:'Copy this code. Use Import to restore on any device.',
+  modalImportTitle:'Restore Backup',modalImportDesc:'Paste your backup code below.',
+  modalCopy:'Copy',modalImport:'Restore',
+  icsTitle:'PrepReady — 6-month check',
+  icsNote:'Check your emergency supplies: water, food, medications, batteries.',
+  reminderSet:'✓ Calendar file downloaded!'
+},
+zh:{
+  eyebrow:'免費 · 個人化 · 隨時準備',
+  h1:'在突發事件<br>發生前，<br><em>做好準備。</em>',
+  heroP:'回答4個問題，即可獲得針對您家庭的個人化緊急備災清單——適用於自然災害、武裝衝突或基礎設施故障。',
+  s1lbl:'第1步 / 共4步',s2lbl:'第2步 / 共4步',s3lbl:'第3步 / 共4步',s4lbl:'第4步 / 共4步',
+  s1title:'您家中有多少人？',
+  s2title:'您最擔心哪些威脅？',
+  s3title:'有任何特殊需求嗎？',
+  s4title:'您想準備多長時間的物資？',
+  whoTitle:'家庭成員組成',
+  people:'人',
+  infant:'嬰幼兒 (0–2歲)',child:'兒童 (3–12歲)',adult:'成人 (13–64歲)',elder:'長者 (65歲+)',
+  tNat:'自然災害',tNatD:'地震、洪水、颱風、山火',
+  tCon:'武裝衝突',tConD:'戰爭、社會動亂、疏散令',
+  tInf:'基礎設施故障',tInfD:'電網、供水、網絡中斷',
+  tPan:'疫症 / 隔離',tPanD:'疾病爆發、封鎖、隔離',
+  nChr:'長期病患藥物',nMob:'行動不便人士',nPet:'寵物',
+  nDiet:'特殊飲食需求',nBaby:'嬰兒用品',nNone:'以上皆無',
+  d3:'72小時（最低標準）',d7:'1週（建議）',d30:'1個月（進階）',
+  durNote:'大多數政府建議至少準備72小時物資。衝突或基礎設施故障情境下，1至2週更為實際。',
+  next:'下一步',back:'← 返回',generate:'生成我的清單',
+  resLbl:'您的個人化清單',resTitle:'緊急備災清單',
+  progTitle:'準備進度',
+  print:'🖨 列印',share:'📤 分享',export:'💾 匯出',import:'📂 匯入',remind:'📅 提醒',restart:'↺ 重新開始',
+  shopTitle:'購物清單',
+  ecTitle:'緊急聯絡卡',
+  ec1:'當地緊急電話：',ec2:'集合地點：',ec3:'外地聯絡人：',ec4:'疏散路線：',
+  footLeft:'PrepReady 免費供所有人使用。資料不會離開您的裝置。',
+  checkedOf:'已確認，共',items:'項',
+  expiryLbl:'到期日：',
+  addItem:'+ 新增物品',addPlaceholder:'新增自訂物品…',
+  stateLabels:['○','🛒','✓'],
+  shopEmpty:'尚未標記任何「需購買」的物品。',
+  collapseAll:'全部收合',expandAll:'全部展開',
+  toastSaved:'✓ 已儲存',toastCopied:'✓ 已複製！',toastShared:'✓ 已分享！',toastImported:'✓ 已匯入！',
+  modalExportTitle:'備份碼',modalExportDesc:'複製此代碼，在任何裝置使用「匯入」功能還原。',
+  modalImportTitle:'還原備份',modalImportDesc:'貼上您的備份碼。',
+  modalCopy:'複製',modalImport:'還原',
+  icsTitle:'PrepReady — 半年度檢查',
+  icsNote:'請檢查您的緊急物資：飲用水、食物、藥物、電池。',
+  reminderSet:'✓ 日曆提醒已下載！'
+}};
+
+function t(k){ return T[lang][k] || T.en[k] || k; }
+
+// ═══════════════════════════════════════════════════════
+// CHECKLIST DATA
+// ═══════════════════════════════════════════════════════
+function getCategories(){
+  const zh = lang==='zh';
+  const m = ST.members, d = ST.duration;
+
+  const cats = [];
+
+  // WATER
+  cats.push({ icon:'💧', nameEn:'Water', nameZh:'飲用水', items:[
+    { nameEn:`Drinking water (${m*d*3} litres total)`, nameZh:`飲用水（${m*d*3}升）`, noteEn:`3L per person per day`, noteZh:`每人每天3升`, pri:true,
+      infoEn:'Purification tip: Add 8 drops of unscented household bleach per gallon of water. Stir and let stand 30 min before drinking.',
+      infoZh:'淨水提示：每加侖水加入8滴無香漂白水，攪拌後靜置30分鐘再飲用。' },
+    { nameEn:'Water purification tablets', nameZh:'淨水錠', noteEn:'Backup when tap water is unsafe', noteZh:'自來水不安全時備用',
+      infoEn:'Most tablets treat 1L per tablet. Follow package instructions. Iodine-based tablets are not suitable for pregnant women.',
+      infoZh:'大多數淨水錠每粒處理1升水。孕婦不宜使用碘基淨水錠。' },
+    { nameEn:'Collapsible water containers', nameZh:'折疊儲水桶', noteEn:'For collecting rainwater or tap water', noteZh:'收集雨水或儲備自來水' },
+  ]});
+
+  // FOOD
+  const fItems = [
+    { nameEn:`Non-perishable food (${d} days)`, nameZh:`不需烹煮的即食食品（${d}天）`, noteEn:'Canned goods, dry goods, energy bars', noteZh:'罐頭、乾糧、能量棒', pri:true },
+    { nameEn:'Manual can opener', nameZh:'手動開罐器', noteEn:'', noteZh:'', pri:true },
+    { nameEn:'Portable stove & fuel', nameZh:'便攜式爐具及燃料', noteEn:'', noteZh:'' },
+    { nameEn:'Eating utensils & storage bags', nameZh:'餐具及食品儲存袋', noteEn:'', noteZh:'' },
+  ];
+  if(ST.needs.includes('diet')) fItems.push({ nameEn:'Dietary-specific foods', nameZh:'符合飲食需求的特定食品', noteEn:'Vegan, gluten-free, halal, etc.', noteZh:'素食、無麩質、清真等', pri:true });
+  if(ST.ages.infant>0||ST.needs.includes('baby')) fItems.push({ nameEn:`Baby formula & food (${d} days)`, nameZh:`嬰兒奶粉及副食品（${d}天）`, noteEn:'', noteZh:'', pri:true });
+  cats.push({ icon:'🥫', nameEn:'Food', nameZh:'食物', items:fItems });
+
+  // FIRST AID
+  const mItems = [
+    { nameEn:'First aid kit (fully stocked)', nameZh:'急救箱（完整配備）', noteEn:'', noteZh:'', pri:true,
+      infoEn:'Check kit contents include: bandages, antiseptic wipes, adhesive tape, scissors, tweezers, and disposable gloves.',
+      infoZh:'確認急救箱內含：繃帶、消毒濕巾、醫用膠布、剪刀、鑷子及即棄手套。' },
+    { nameEn:'Face masks (N95 or surgical)', nameZh:'口罩（N95或外科口罩）', noteEn:'', noteZh:'' },
+    { nameEn:'Antiseptic & disposable gloves', nameZh:'消毒酒精及手套', noteEn:'', noteZh:'' },
+    { nameEn:'Thermometer', nameZh:'體溫計', noteEn:'', noteZh:'' },
+    { nameEn:'Pain relief & fever medication', nameZh:'止痛藥及退燒藥', noteEn:'', noteZh:'' },
+  ];
+  if(ST.needs.includes('chronic')) mItems.push({ nameEn:`Prescription medications (${d}+ day supply)`, nameZh:`長期藥物（${d}天以上份量）`, noteEn:'Ask your doctor for extra supply', noteZh:'請提前向醫生要求多配藥', pri:true });
+  if(ST.ages.elder>0) mItems.push({ nameEn:'Elder-specific medications & aids', nameZh:'長者專用藥物及醫療用品', noteEn:'', noteZh:'', pri:true });
+  cats.push({ icon:'🩺', nameEn:'First Aid & Medical', nameZh:'醫療急救', items:mItems });
+
+  // POWER
+  const pItems = [
+    { nameEn:`Flashlights (×${m})`, nameZh:`手電筒（×${m}）`, noteEn:'One per person', noteZh:'每人一個', pri:true },
+    { nameEn:'Extra batteries (large supply)', nameZh:'備用電池（大量）', noteEn:'', noteZh:'' },
+    { nameEn:'Power bank (high capacity)', nameZh:'行動電源（大容量）', noteEn:'', noteZh:'' },
+    { nameEn:'Candles & lighters', nameZh:'蠟燭及打火機', noteEn:'', noteZh:'' },
+  ];
+  if(ST.threats.includes('infra')) pItems.push({ nameEn:'Solar charging panel', nameZh:'太陽能充電板', noteEn:'Critical for extended outages', noteZh:'長期停電時尤為重要' });
+  cats.push({ icon:'🔦', nameEn:'Power & Lighting', nameZh:'電力及照明', items:pItems });
+
+  // DOCUMENTS
+  const dItems = [
+    { nameEn:'ID copies in waterproof bag', nameZh:'身份證件副本（防水袋）', noteEn:'Passport, ID, birth certificates', noteZh:'護照、身份證、出生證明', pri:true },
+    { nameEn:'Bank & insurance details', nameZh:'銀行及保險資料副本', noteEn:'', noteZh:'' },
+    { nameEn:'Emergency contacts (printed)', nameZh:'緊急聯絡人名單（紙本）', noteEn:'', noteZh:'', pri:true },
+    { nameEn:'Cash in small denominations', nameZh:'少量現金（小額紙幣）', noteEn:'Electronic payments may fail', noteZh:'電子支付可能無法使用' },
+  ];
+  if(ST.threats.includes('conflict')) dItems.push({ nameEn:'Evacuation plan & paper maps', nameZh:'疏散計劃及紙本地圖', noteEn:'Know two routes out', noteZh:'熟悉兩條疏散路線', pri:true });
+  cats.push({ icon:'📄', nameEn:'Documents & Finance', nameZh:'文件及財務', items:dItems });
+
+  // COMMS
+  cats.push({ icon:'📻', nameEn:'Communications', nameZh:'通訊', items:[
+    { nameEn:'Battery-powered radio', nameZh:'電池式收音機', noteEn:'Critical for emergency broadcasts', noteZh:'緊急廣播的唯一途徑', pri:true },
+    { nameEn:'Phone chargers (multiple types)', nameZh:'充電器（各種插頭）', noteEn:'', noteZh:'' },
+    ...(ST.threats.includes('conflict')?[{ nameEn:'Whistle (one per person)', nameZh:'哨子（每人一個）', noteEn:'For signalling', noteZh:'信號用途' }]:[]),
+  ]});
+
+  // SHELTER
+  cats.push({ icon:'🏕️', nameEn:'Shelter & Warmth', nameZh:'避難及保暖', items:[
+    { nameEn:`Emergency blankets (×${m})`, nameZh:`急救毯（×${m}）`, noteEn:'Or sleeping bags', noteZh:'或睡袋', pri:true },
+    { nameEn:'Rain poncho (per person)', nameZh:'雨衣（每人一件）', noteEn:'', noteZh:'' },
+    { nameEn:'Change of clothes (several sets)', nameZh:'換洗衣物（數套）', noteEn:'', noteZh:'' },
+    { nameEn:'Sturdy walking shoes', nameZh:'堅固步行鞋', noteEn:'', noteZh:'' },
+  ]});
+
+  // SANITATION
+  const sItems = [
+    { nameEn:'Toilet paper & wet wipes', nameZh:'衛生紙及濕紙巾', noteEn:'', noteZh:'' },
+    { nameEn:'Hand sanitiser', nameZh:'洗手液', noteEn:'', noteZh:'' },
+    { nameEn:'Large rubbish bags', nameZh:'垃圾袋（大型）', noteEn:'', noteZh:'' },
+    { nameEn:'Portable toilet alternative', nameZh:'便攜式廁所方案', noteEn:'', noteZh:'' },
+  ];
+  if(ST.ages.infant>0||ST.needs.includes('baby')) sItems.push({ nameEn:`Nappies (${d*6} pieces)`, nameZh:`紙尿片（${d*6}片）`, noteEn:'', noteZh:'', pri:true });
+  cats.push({ icon:'🚿', nameEn:'Sanitation & Hygiene', nameZh:'衛生用品', items:sItems });
+
+  // SPECIAL
+  if(ST.needs.includes('mobility')){
+    cats.push({ icon:'♿', nameEn:'Mobility Aids', nameZh:'行動輔助', items:[
+      { nameEn:'Spare mobility aids', nameZh:'備用輔助器材（輪椅、助行器）', noteEn:'', noteZh:'', pri:true },
+      { nameEn:'Pre-planned accessible evacuation route', nameZh:'預先規劃無障礙疏散路線', noteEn:'', noteZh:'', pri:true },
+      { nameEn:'Register needs with emergency services', nameZh:'向緊急服務登記特殊需求', noteEn:'', noteZh:'' },
+    ]});
+  }
+
+  if(ST.needs.includes('pet')){
+    cats.push({ icon:'🐾', nameEn:'Pet Supplies', nameZh:'寵物用品', items:[
+      { nameEn:`Pet food (${d} day supply)`, nameZh:`寵物糧食（${d}天）`, noteEn:'', noteZh:'', pri:true },
+      { nameEn:'Pet water bowl & containers', nameZh:'寵物飲水及碗具', noteEn:'', noteZh:'' },
+      { nameEn:'Pet carrier & leash', nameZh:'寵物籠及牽引繩', noteEn:'', noteZh:'' },
+      { nameEn:'Pet medical records & vaccination proof', nameZh:'寵物醫療記錄及疫苗證明', noteEn:'', noteZh:'' },
+    ]});
+  }
+
+  if(ST.threats.includes('conflict')){
+    cats.push({ icon:'🏃', nameEn:'Go-Bag (Bug-Out Bag)', nameZh:'快速撤離包', items:[
+      { nameEn:'Pre-packed backpack ready to grab', nameZh:'預先打包的背包（隨時可走）', noteEn:'All essentials, grab in under 2 minutes', noteZh:'所有必需品，2分鐘內拎起就走', pri:true,
+        infoEn:'Packing tip: Heaviest items closest to your back, frequently needed items in outer pockets, all clothes in waterproof bags.',
+        infoZh:'打包提示：最重的物品靠近背部，常用物品放外袋，所有衣物用防水袋裝起來。' },
+      { nameEn:'Original documents', nameZh:'重要文件（原件）', noteEn:'', noteZh:'', pri:true },
+      { nameEn:'Know your nearest shelter', nameZh:'確認最近避難所位置', noteEn:'', noteZh:'', pri:true },
+      { nameEn:'Two pre-agreed family meeting points', nameZh:'預設兩個家庭集合點', noteEn:'', noteZh:'' },
+    ]});
+  }
+
+  return cats;
+}
+
+// ═══════════════════════════════════════════════════════
+// STEP NAVIGATION
+// ═══════════════════════════════════════════════════════
+function goStep(n){
+  document.getElementById('s'+curStep).classList.remove('on');
+  curStep = n;
+  document.getElementById('s'+n).classList.add('on');
+  document.getElementById('heroSection').style.display = n===1?'block':'none';
+  document.getElementById('progTrack').style.display = n===1?'none':'flex';
+  if(n<=4) updateProgBar(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgBar(n){
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById('ps'+i);
+    el.className='prog-step'+(i<n?' done':i===n?' cur':'');
+  }
+}
+
+function adjCount(d){ ST.members=Math.max(1,Math.min(20,ST.members+d)); document.getElementById('memberNum').textContent=ST.members; }
+function adjAge(g,d){ ST.ages[g]=Math.max(0,ST.ages[g]+d); document.getElementById('a-'+g).textContent=ST.ages[g]; }
+function togThreat(t){ const el=document.getElementById('t-'+t); const idx=ST.threats.indexOf(t); if(idx>=0){ST.threats.splice(idx,1);el.classList.remove('sel');}else{ST.threats.push(t);el.classList.add('sel');} }
+function togNeed(n){
+  if(n==='none'){ ST.needs=[]; document.querySelectorAll('.need-chip').forEach(c=>c.classList.remove('sel')); document.getElementById('n-none').classList.add('sel'); return; }
+  document.getElementById('n-none').classList.remove('sel');
+  ST.needs=ST.needs.filter(x=>x!=='none');
+  const el=document.getElementById('n-'+n); const idx=ST.needs.indexOf(n);
+  if(idx>=0){ST.needs.splice(idx,1);el.classList.remove('sel');}else{ST.needs.push(n);el.classList.add('sel');}
+}
+function setDur(d){ ST.duration=d; document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('sel')); document.getElementById('d-'+d).classList.add('sel'); }
+
+// ═══════════════════════════════════════════════════════
+// BUILD RESULT
+// ═══════════════════════════════════════════════════════
+function buildResult(){
+  document.getElementById('s4').classList.remove('on');
+  document.getElementById('sResult').classList.add('on');
+  document.getElementById('progTrack').style.display='none';
+  renderResult();
+  restoreEcContacts();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderResult(){
+  const cats = getCategories();
+
+  // Meta
+  const thrNames = ST.threats.map(x=>({natural:t('tNat'),conflict:t('tCon'),infra:t('tInf'),pandemic:t('tPan')}[x])).join(', ')||'General';
+  document.getElementById('metaRow').innerHTML=`
+    <div class="meta-tag"><strong>${ST.members}</strong> ${t('people')}</div>
+    <div class="meta-tag"><strong>${ST.duration}</strong> ${lang==='zh'?'天':'days'}</div>
+    <div class="meta-tag">${thrNames}</div>`;
+
+  const out = document.getElementById('checklistOut');
+  out.innerHTML='';
+
+  cats.forEach((cat,ci)=>{
+    const allItems = [...cat.items, ...(customItems[ci]||[]).map(c=>({nameEn:c.name,nameZh:c.name,noteEn:'',noteZh:'',custom:true}))];
+    const block = document.createElement('div');
+    block.className='cat-block';
+    block.id='cat-'+ci;
+
+    const name = lang==='zh'?cat.nameZh:cat.nameEn;
+    block.innerHTML=`
+      <div class="cat-head" onclick="toggleCat(${ci})">
+        <span class="cat-icon">${cat.icon}</span>
+        <span class="cat-name">${name}</span>
+        <span class="cat-badge" id="badge-${ci}">${allItems.length} items</span>
+        <span class="cat-chevron">▾</span>
+      </div>
+      <div class="cat-body" id="body-${ci}">
+        <div id="items-${ci}"></div>
+        <div class="add-custom">
+          <input class="custom-input" id="ci-${ci}" placeholder="${t('addPlaceholder')}" onkeydown="if(event.key==='Enter')addCustom(${ci})">
+          <button class="add-btn" onclick="addCustom(${ci})">${t('addItem')}</button>
+        </div>
+      </div>`;
+    out.appendChild(block);
+    renderItems(ci, cat.items);
+  });
+
+  updateRing();
+}
+
+function renderItems(ci, baseItems){
+  const customs = (customItems[ci]||[]).map(c=>({nameEn:c.name,nameZh:c.name,noteEn:'',noteZh:'',key:c.key}));
+  const all = [...baseItems.map((it,ii)=>({...it,key:`${ci}-${ii}`})), ...customs];
+  const cont = document.getElementById('items-'+ci);
+  cont.innerHTML='';
+
+  all.forEach(it=>{
+    const key = it.key;
+    const st = itemStates[key]||0;
+    const exp = itemExpiry[key]||'';
+    const name = lang==='zh'?it.nameZh:it.nameEn;
+    const note = lang==='zh'?it.noteZh:it.noteEn;
+    const info = lang==='zh'?it.infoZh:it.infoEn;
+    const stateClass = st===1?'need-buy':st===2?'is-have':'';
+    const btnClass = st===1?'need':st===2?'have':'';
+    const btnIcon = ['○','🛒','✓'][st];
+
+    let expiryHTML='';
+    if(st===2){
+      let badgeClass='', badgeText='';
+      if(exp){
+        const days=Math.round((new Date(exp)-new Date())/(1000*60*60*24));
+        if(days<0){badgeClass='exp-danger';badgeText=lang==='zh'?'已過期':'Expired';}
+        else if(days<=30){badgeClass='exp-warn';badgeText=lang==='zh'?`${days}天後到期`:`Expires in ${days}d`;}
+        else{badgeClass='exp-ok';badgeText=lang==='zh'?`${days}天後到期`:`${days}d left`;}
+      }
+      expiryHTML=`<div class="item-expiry-row">
+        <span class="expiry-label">${t('expiryLbl')}</span>
+        <input class="expiry-input" type="date" value="${exp}" onchange="setExpiry('${key}',this.value)" onclick="event.stopPropagation()">
+        ${exp?`<span class="expiry-badge ${badgeClass}">${badgeText}</span>`:''}
+      </div>`;
+    }
+
+    const row = document.createElement('div');
+    row.className=`item-row ${stateClass} ${it.pri?'priority-high':''}`;
+    row.dataset.key=key;
+    row.innerHTML=`
+      <button class="state-btn ${btnClass}" onclick="cycleState('${key}',event)" title="Click to cycle: Not ready → Need to buy → Have it">${btnIcon}</button>
+      <div class="item-body">
+        <div class="item-name">${name}</div>
+        ${note?`<div class="item-note">${note}</div>`:''}
+        ${expiryHTML}
+      </div>
+      ${info?`<button class="info-trigger" onclick="toggleInfo(this,event)" tabindex="0">i</button><div class="info-popup">${info}</div>`:''}
+      ${it.custom?`<button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:2px 6px;" onclick="removeCustom(${ci},'${key}',event)">✕</button>`:''}`;
+    cont.appendChild(row);
+  });
+
+  updateBadge(ci);
+}
+
+function updateBadge(ci){
+  const rows = document.querySelectorAll(`#items-${ci} .item-row`);
+  const done = [...rows].filter(r=>r.classList.contains('is-have')).length;
+  const el = document.getElementById('badge-'+ci);
+  if(el) el.textContent=`${done}/${rows.length}`;
+}
+
+function cycleState(key, e){
+  e.stopPropagation();
+  itemStates[key]=((itemStates[key]||0)+1)%3;
+  // re-render items for this cat
+  const ci = key.split('-')[0];
+  const cats=getCategories();
+  if(cats[ci]) renderItems(parseInt(ci),cats[ci].items);
+  updateRing();
+  updateShopList();
+  autoSave();
+}
+
+function setExpiry(key,val){
+  itemExpiry[key]=val;
+  autoSave();
+  // refresh to show badge
+  const ci=parseInt(key.split('-')[0]);
+  const cats=getCategories();
+  if(cats[ci]) renderItems(ci,cats[ci].items);
+}
+
+function toggleCat(ci){
+  document.getElementById('cat-'+ci).classList.toggle('collapsed');
+}
+
+function toggleInfo(btn,e){
+  e.stopPropagation();
+  btn.classList.toggle('open');
+}
+
+function addCustom(ci){
+  const inp=document.getElementById('ci-'+ci);
+  const name=inp.value.trim();
+  if(!name)return;
+  if(!customItems[ci]) customItems[ci]=[];
+  const key=`custom-${ci}-${Date.now()}`;
+  customItems[ci].push({name,key});
+  inp.value='';
+  const cats=getCategories();
+  renderItems(ci,cats[ci].items);
+  updateRing();
+  autoSave();
+}
+
+function removeCustom(ci,key,e){
+  e.stopPropagation();
+  if(customItems[ci]) customItems[ci]=customItems[ci].filter(c=>c.key!==key);
+  delete itemStates[key]; delete itemExpiry[key];
+  const cats=getCategories();
+  renderItems(ci,cats[ci].items);
+  updateRing();
+  autoSave();
+}
+
+// ═══════════════════════════════════════════════════════
+// RING & SHOP
+// ═══════════════════════════════════════════════════════
+function updateRing(){
+  const all=document.querySelectorAll('.item-row');
+  const done=[...all].filter(r=>r.classList.contains('is-have')).length;
+  const pct=all.length?Math.round(done/all.length*100):0;
+  const circ=163.4;
+  document.getElementById('ringFill').style.strokeDashoffset=circ-(circ*pct/100);
+  document.getElementById('ringNum').textContent=pct+'%';
+  document.getElementById('progDesc').textContent=`${done} ${t('checkedOf')} ${all.length} ${t('items')}`;
+}
+
+function updateShopList(){
+  const items=[...document.querySelectorAll('.item-row.need-buy')];
+  const cnt=items.length;
+  document.getElementById('shopCount').textContent=cnt?`(${cnt})`:'';
+  const list=document.getElementById('shopList');
+  if(!cnt){ list.innerHTML=`<p class="shop-empty">${t('shopEmpty')}</p>`; return; }
+  list.innerHTML=items.map(r=>{
+    const name=r.querySelector('.item-name').textContent.replace(/^🛒 /,'');
+    return`<div class="shop-item">🛒 ${name}</div>`;
+  }).join('');
+}
+
+function toggleShop(){
+  shopOpen=!shopOpen;
+  document.getElementById('shopList').classList.toggle('on',shopOpen);
+  document.getElementById('shopChevron').textContent=shopOpen?'▲':'▼';
+  if(shopOpen) updateShopList();
+}
+
+// ═══════════════════════════════════════════════════════
+// SAVE / LOAD
+// ═══════════════════════════════════════════════════════
+function getFullData(){
+  return JSON.stringify({
+    v:2, lang, ST, itemStates, itemExpiry, customItems,
+    contacts:{ ec1:document.getElementById('ec1')?.value||'', ec2:document.getElementById('ec2')?.value||'', ec3:document.getElementById('ec3')?.value||'', ec4:document.getElementById('ec4')?.value||'' }
+  });
+}
+
+function autoSave(){
+  try{ localStorage.setItem('prepready_v2',getFullData()); } catch(e){}
+}
+
+function restoreEcContacts(){
+  try{
+    const d=JSON.parse(localStorage.getItem('prepready_v2')||'{}');
+    if(d.contacts){ ['ec1','ec2','ec3','ec4'].forEach(k=>{ const el=document.getElementById(k); if(el&&d.contacts[k]) el.value=d.contacts[k]; }); }
+  }catch(e){}
+}
+
+function loadSaved(){
+  try{
+    const raw=localStorage.getItem('prepready_v2');
+    if(!raw) return false;
+    const d=JSON.parse(raw);
+    if(d.ST) Object.assign(ST,d.ST);
+    if(d.itemStates) itemStates=d.itemStates;
+    if(d.itemExpiry) itemExpiry=d.itemExpiry;
+    if(d.customItems) customItems=d.customItems;
+    if(d.lang) lang=d.lang;
+    return true;
+  }catch(e){ return false; }
+}
+
+// ═══════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════
+function exportData(){
+  const data=getFullData();
+  document.getElementById('modalTitle').textContent=t('modalExportTitle');
+  document.getElementById('modalDesc').textContent=t('modalExportDesc');
+  document.getElementById('modalTA').value=data;
+  document.getElementById('modalAction').textContent=t('modalCopy');
+  document.getElementById('modalAction').onclick=()=>{ navigator.clipboard?.writeText(data).catch(()=>{}); document.getElementById('modalTA').select(); document.execCommand('copy'); showToast(t('toastCopied')); };
+  document.getElementById('modalBg').classList.add('on');
+}
+
+function showImport(){
+  document.getElementById('modalTitle').textContent=t('modalImportTitle');
+  document.getElementById('modalDesc').textContent=t('modalImportDesc');
+  document.getElementById('modalTA').value='';
+  document.getElementById('modalAction').textContent=t('modalImport');
+  document.getElementById('modalAction').onclick=()=>{
+    try{
+      const d=JSON.parse(document.getElementById('modalTA').value);
+      if(d.ST) Object.assign(ST,d.ST);
+      if(d.itemStates) itemStates=d.itemStates;
+      if(d.itemExpiry) itemExpiry=d.itemExpiry;
+      if(d.customItems) customItems=d.customItems;
+      closeModal();
+      buildResult();
+      showToast(t('toastImported'));
+    }catch(e){ alert('Invalid backup code'); }
+  };
+  document.getElementById('modalBg').classList.add('on');
+}
+
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modalBg')) document.getElementById('modalBg').classList.remove('on');
+}
+
+function shareList(){
+  const cats=getCategories();
+  let text=`🚨 Emergency Prep List (PrepReady)\n\n`;
+  cats.forEach(c=>{ text+=`${c.icon} ${lang==='zh'?c.nameZh:c.nameEn}\n`; c.items.forEach(it=>{ text+=`  □ ${lang==='zh'?it.nameZh:it.nameEn}\n`; }); text+='\n'; });
+  text+=`\nCreated with PrepReady by Billion Studio\nhttps://billionstudio.co.uk`;
+  if(navigator.share){ navigator.share({title:'Emergency Prep List',text}).then(()=>showToast(t('toastShared'))).catch(()=>{}); }
+  else{ navigator.clipboard?.writeText(text).then(()=>showToast(t('toastCopied'))).catch(()=>{}); }
+}
+
+function downloadICS(){
+  const now=new Date();
+  const fut=new Date(now); fut.setMonth(fut.getMonth()+6);
+  const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const ics=`BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//PrepReady//Billion Studio//EN\nBEGIN:VEVENT\nUID:prepready-${Date.now()}@billionstudio\nDTSTAMP:${fmt(now)}\nDTSTART:${fmt(fut)}\nSUMMARY:${t('icsTitle')}\nDESCRIPTION:${t('icsNote')}\nEND:VEVENT\nEND:VCALENDAR`;
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='prepready-reminder.ics'; a.click();
+  showToast(t('reminderSet'));
+}
+
+function resetAll(){
+  if(!confirm(lang==='zh'?'確定要重新開始？進度將清除。':'Start over? Your progress will be cleared.')) return;
+  ST={members:2,ages:{infant:0,child:0,adult:2,elder:0},threats:[],needs:[],duration:7};
+  itemStates={}; itemExpiry={}; customItems={};
+  document.getElementById('sResult').classList.remove('on');
+  document.getElementById('memberNum').textContent='2';
+  ['infant','child','adult','elder'].forEach(g=>{ document.getElementById('a-'+g).textContent=g==='adult'?'2':'0'; }); ST.ages.adult=2;
+  document.querySelectorAll('.t-card,.need-chip').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('d-7').classList.add('sel');
+  curStep=1;
+  document.getElementById('heroSection').style.display='block';
+  document.getElementById('progTrack').style.display='none';
+  document.getElementById('s1').classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showToast(msg,dur=2200){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ═══════════════════════════════════════════════════════
+// LANGUAGE & THEME
+// ═══════════════════════════════════════════════════════
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.toggle('active',b.textContent===(l==='en'?'EN':'繁中')));
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.dataset.i18n; if(T[l][k]!==undefined) el.innerHTML=T[l][k]; });
+  if(document.getElementById('sResult').classList.contains('on')){ renderResult(); restoreEcContacts(); }
+  autoSave();
+}
+
+function toggleTheme(){
+  theme=theme==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=theme;
+  document.getElementById('themeBtn').textContent=theme==='dark'?'☀️':'🌙';
+  autoSave();
+}
+
+// EC contact auto-save
+document.addEventListener('input',e=>{ if(e.target.classList.contains('ec-inp')) autoSave(); });
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+window.addEventListener('load',()=>{
+  loadSaved();
+  // Apply saved theme
+  if(theme==='light'){ document.documentElement.dataset.theme='light'; document.getElementById('themeBtn').textContent='🌙'; }
+});
+</script>
+</body>
+</html>
