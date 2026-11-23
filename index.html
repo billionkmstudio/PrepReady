@@ -82,6 +82,18 @@ nav a:hover{background:#ffffff26}
 .item .t{flex:1}.item .t small{display:block;color:var(--mute);font-size:13.5px}
 .item .q{font-weight:800;white-space:nowrap;color:var(--sky)}
 .item.done .t>span{text-decoration:line-through;color:var(--mute)}
+.item{cursor:default}.chk{display:flex;gap:12px;align-items:flex-start;flex:1;cursor:pointer}
+.qw{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:14px;color:var(--mute)}
+.qw input{width:62px;font:inherit;font-size:16px;font-weight:700;padding:6px 8px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-align:right}
+.qw b{color:var(--sky);font-size:15px}.item.part .qw input{border-color:var(--sig)}.item.done .qw input{border-color:var(--ok)}
+.x{border:0;background:none;color:var(--mute);width:36px;height:36px;border-radius:10px;font-size:20px;line-height:1;flex:none}.x:hover{background:var(--soft);color:var(--ink)}
+.mine{font-size:11.5px;font-weight:700;color:var(--sky);background:var(--skysoft);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+.addf{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr) 76px minmax(0,.8fr) auto;gap:8px;margin-top:18px;padding:14px;border-radius:16px;background:var(--soft)}
+.addf input,.addf select{font:inherit;font-size:16px;padding:10px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:46px;width:100%}
+.addf button{min-height:46px;border:0;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:700;padding:0 18px}
+.addf .hint{grid-column:1/-1;font-size:13.5px;color:var(--mute)}
+.restore{border:0;background:none;color:var(--sky);font-weight:600;padding:8px 0;min-height:40px}
+@media (max-width:760px){.addf{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.addf .nm{grid-column:1/-1}.item{flex-wrap:wrap}.qw{margin-left:36px}}
 details.shop{margin-top:22px;border:1.5px dashed var(--line);border-radius:16px;padding:14px 18px}
 details.shop summary{font-weight:700;cursor:pointer;min-height:28px}
 .contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
@@ -92,10 +104,22 @@ details.shop summary{font-weight:700;cursor:pointer;min-height:28px}
 /* digital */
 .digital{background:var(--ink);color:var(--bg)}
 .digital .lede{color:color-mix(in srgb,var(--bg) 72%,transparent)}
-.dgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:28px}
-.dgrid div{border:1.5px solid color-mix(in srgb,var(--bg) 22%,transparent);border-radius:18px;padding:18px}
-.dgrid h3{font-size:17px;margin-bottom:6px}.dgrid p{margin:0;font-size:15px;color:color-mix(in srgb,var(--bg) 75%,transparent)}
-.dgrid svg{width:34px;height:34px;margin-bottom:10px;color:var(--sig)}
+.dfade{color:color-mix(in srgb,var(--bg) 70%,transparent)}
+.dtop{display:flex;gap:16px;align-items:center;margin-top:24px}
+.digital .ring{background:conic-gradient(var(--sig) calc(var(--p)*1%),color-mix(in srgb,var(--bg) 18%,transparent) 0)}.digital .ring b{background:var(--ink)}
+.dtabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.dtab{border:1.5px solid color-mix(in srgb,var(--bg) 25%,transparent);background:none;border-radius:99px;padding:10px 16px;min-height:44px;font-weight:700;color:var(--bg)}
+.dtab small{font-weight:500;opacity:.7;margin-left:4px}
+.dtab[aria-selected=true]{background:var(--sig);border-color:var(--sig);color:#fff}
+.dpanel{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(18px,3vw,40px);margin-top:22px;align-items:start}
+.dside{border-radius:20px;padding:22px;background:color-mix(in srgb,var(--bg) 8%,transparent)}
+.dside svg{width:56px;height:56px;color:var(--sig);margin-bottom:10px}.dside h3{font-size:22px;margin-bottom:8px}.dside p{margin:0}
+.ditem{display:flex;gap:14px;align-items:flex-start;padding:14px 4px;border-bottom:1px solid color-mix(in srgb,var(--bg) 14%,transparent);cursor:pointer}
+.ditem input{appearance:none;width:24px;height:24px;border:2px solid color-mix(in srgb,var(--bg) 55%,transparent);border-radius:7px;flex:none;margin:2px 0 0;display:grid;place-items:center;cursor:pointer}
+.ditem input:checked{background:var(--sig);border-color:var(--sig)}
+.ditem input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.ditem b{display:block;font-size:16.5px}.ditem p{margin:3px 0 0;font-size:15px}.ditem a{color:#ffb38f}
+@media (max-width:760px){.dpanel{grid-template-columns:minmax(0,1fr)}}
 /* numbers */
 .nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:28px}
 .num b{display:block;font-size:clamp(26px,3vw,34px);font-weight:900;color:var(--sig);white-space:nowrap}
@@ -187,6 +211,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
         </div>
       </div>
       <div id="list"></div>
+      <button class="restore" id="restore" hidden></button>
+      <form class="addf" id="addf" autocomplete="off">
+        <select id="aCat" aria-label="Category"></select>
+        <input class="nm" id="aName" required>
+        <input id="aQty" type="number" min="0" inputmode="numeric" aria-label="Qty">
+        <input id="aUnit" aria-label="Unit">
+        <button type="submit"><span class="en">+ Add</span><span class="zh">+ 新增</span></button>
+        <div class="hint"><span class="en">Add your own items — e.g. your family’s favourite biscuits, a camping stove, spare glasses. Use × to hide anything you don’t need.</span><span class="zh">加入你自己嘅項目，例如家人鍾意食嘅餅乾、露營爐、後備眼鏡。用 × 隱藏唔需要嘅項目。</span></div>
+      </form>
       <details class="shop"><summary><span class="en">Shopping list — what’s still missing</span><span class="zh">購物清單——仲未準備好的</span> (<span id="shopN">0</span>)</summary><ul id="shop"></ul></details>
       <details class="shop" open><summary><span class="en">Emergency contact card</span><span class="zh">緊急聯絡卡</span></summary>
         <p class="note"><span class="en">Write these on paper too — your phone may be flat or the network down.</span><span class="zh">記得同時寫在紙上——手機可能冇電或網絡中斷。</span></p>
@@ -216,13 +249,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
 
 <section class="band digital" id="digital"><div class="wrap">
   <h2><span class="en">Be digitally ready</span><span class="zh">數碼備災</span></h2>
-  <p class="lede"><span class="en">Be Ready names cyber attacks alongside storms. When the internet, card payments or online services stop, these habits keep you going.</span><span class="zh">「Be Ready」把網絡攻擊與風暴並列。當網絡、拍卡或網上服務停頓，以下習慣能讓你照常應付。</span></p>
-  <div class="dgrid">
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg><h3><span class="en">Cash, not just cards</span><span class="zh">現金，不只靠卡</span></h3><p><span class="en">Card machines and banking apps need power and internet. Keep small notes and coins.</span><span class="zh">拍卡機和銀行 App 都要電和網絡，家中留些散紙和硬幣。</span></p></div>
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l3 3v15H6z"/><path d="M9 11h6M9 15h6"/></svg><h3><span class="en">Paper copies</span><span class="zh">紙本副本</span></h3><p><span class="en">Print key phone numbers, medication names and doses, and ID copies. Keep them in a waterproof bag.</span><span class="zh">打印重要電話、藥物名稱劑量及身份證明副本，放入防水袋。</span></p></div>
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 8h4l-2 4h3l-4 5 1-4h-3z"/></svg><h3><span class="en">Charged and offline</span><span class="zh">充好電・可離線</span></h3><p><span class="en">Keep a full power bank, download offline maps of your area, and save 2-step backup codes on paper.</span><span class="zh">充滿充電寶、下載本區離線地圖、把雙重認證備用碼抄在紙上。</span></p></div>
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><h3><span class="en">Spot the scams</span><span class="zh">提防騙案</span></h3><p><span class="en">Crises bring fake “refund” texts and calls. Official bodies won’t ask for your bank details by message.</span><span class="zh">危機時常有假「退款」短訊和來電。官方機構不會用短訊索取銀行資料。</span></p></div>
-  </div>
+  <p class="lede dfade"><span class="en">Be Ready lists cyber attacks next to storms. Supplies won’t help if you can’t phone out, pay, or get into your accounts. Pick a scenario and tick off what you’ve sorted.</span><span class="zh">「Be Ready」將網絡攻擊與風暴並列。就算儲夠物資，打唔到電話、俾唔到錢、登入唔到帳戶都一樣麻煩。揀一個情境，做好就剔。</span></p>
+  <div class="dtop"><div class="ring" id="dring"><b id="dpct">0%</b></div><div><h3 id="dsum"></h3><div class="note dfade" id="dsub"></div></div></div>
+  <div class="dtabs" role="tablist" id="dtabs"></div>
+  <div class="dpanel" id="dpanel"></div>
 </div></section>
 
 <section class="band numbers" id="numbers"><div class="wrap">
@@ -246,96 +276,171 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
 
 <footer><div class="wrap">
   <span><span class="en">Free for everyone. Nothing you enter leaves your device. This site is independent and not run by the UK Government.</span><span class="zh">免費使用，你輸入的資料不會離開你的裝置。本站為獨立網站，並非英國政府營運。</span></span>
-  <span>© <a href="https://billionstudio.co.uk" rel="noopener">Billion Studio</a> 2026 · PrepReady v3.0</span>
+  <span>© <a href="https://billionstudio.co.uk" rel="noopener">Billion Studio</a> 2026 · PrepReady v3.1</span>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 {
 const KEY='prepready.v3';
-let S={lang:null,a:2,c:0,i:0,e:0,p:0,d:3,t:['power','flood','cyber','water'],s:[],done:{},ct:{}};
+let S={lang:null,a:2,c:0,i:0,e:0,p:0,d:3,t:['power','flood','cyber','water'],s:[],done:{},have:{},hid:{},mine:[],dg:{},tab:'net',ct:{}};
 try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+for(const k of ['done','have','hid','dg','ct'])if(!S[k]||typeof S[k]!=='object')S[k]={};
+if(!Array.isArray(S.mine))S.mine=[];
 if(!S.lang)S.lang=/^zh/i.test(navigator.language||'')?'zh':'en';
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const L=(en,zh)=>S.lang==='zh'?zh:en;
 const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 const PEOPLE=[['a','Adults','成人','18–64','18–64 歲'],['e','Older adults','長者','65+','65 歲以上'],['c','Children','兒童','3–17','3–17 歲'],['i','Babies & toddlers','嬰幼兒','0–2','0–2 歲'],['p','Pets','寵物','','']];
 const DAYS=[[3,'3 days','3 日'],[7,'1 week','1 星期'],[14,'2 weeks','2 星期']];
 const THREATS=[['power','Power cut','停電'],['flood','Flood & storm','水浸及風暴'],['cyber','Cyber attack / internet down','網絡攻擊／斷網'],['water','Water supply cut','停水'],['ill','Illness at home','家中有人患病']];
 const SPECIAL=[['meds','Regular medication','長期服藥'],['mob','Mobility needs','行動不便'],['diet','Special diet','特別飲食']];
-const CATS={water:['Water','食水','#2463d6'],food:['Food','食物','#f0a21f'],light:['Light & warmth','照明及保暖','#f05a1f'],comms:['Power & radio','電源及收音機','#7b5cd6'],docs:['Cash & documents','現金及文件','#18864f'],health:['Health & hygiene','健康及衛生','#d6336c'],family:['Babies, children & pets','嬰幼兒、兒童及寵物','#0e9aa7'],plan:['Plan & stay informed','計劃及資訊','#545d66']};
+const CATS={water:['Water','食水','#2463d6'],food:['Food','食物','#f0a21f'],light:['Light & warmth','照明及保暖','#f05a1f'],comms:['Power & radio','電源及收音機','#7b5cd6'],docs:['Cash & documents','現金及文件','#18864f'],health:['Health & hygiene','健康及衛生','#d6336c'],family:['Babies, children & pets','嬰幼兒、兒童及寵物','#0e9aa7'],plan:['Plan & stay informed','計劃及資訊','#545d66'],other:['My extras','我的其他項目','#8a6d3b']};
 
-// [cat,id,en,zh,noteEn,noteZh,qty(x)->[n,en,zh]|null,when(x)->bool]
+// [cat,id,en,zh,noteEn,noteZh,qty(x)->[n,unitEn,unitZh]|null,when(x)->bool]
 const ITEMS=[
 ['water','w1','Bottled drinking water','樽裝飲用水','3 litres per person per day, plus a little extra for cooking and washing','每人每日 3 公升，另加少量煮食及清潔用',x=>[3*x.n*x.d,'L','公升']],
 ['water','w2','Water purification tablets','淨水藥片','Backup if bottled water runs low','樽裝水不夠時的後備',null,x=>x.t.has('water')||x.t.has('flood')],
-['water','w3','Big containers to fill when warned','大水桶（收到警告時儲水）','Fill them and the bath before a planned cut','預告停水前先裝滿水桶及浴缸',null,x=>x.t.has('water')],
-['food','f1','Non-perishable, no-cook food','免煮、耐存的食物','Tins, dried fruit, nuts, crackers — food your family normally eats','罐頭、乾果、果仁、餅乾——揀家人平日會吃的',x=>[3*x.n*x.d,'meals','餐']],
-['food','f2','Manual tin opener','手動開罐器','',''],
-['food','f3','Food that fits special diets','符合特別飲食需要的食物','Allergy-safe, halal, vegetarian etc. — label it','如防敏感、清真、素食——貼上標籤',null,x=>x.s.has('diet')],
-['light','l1','Torch','電筒','One for each room you’d use','每個常用房間一支',x=>[Math.max(1,Math.ceil(x.n/2)),'',' 支']],
-['light','l2','Spare batteries','後備電池','Check sizes match your torch and radio','確認尺寸配合電筒及收音機',null],
+['water','w3','Large containers to fill when warned','大水桶（收到警告時儲水）','Fill them and the bath before a planned cut','預告停水前先裝滿水桶及浴缸',null,x=>x.t.has('water')],
+['food','f1','Tinned meals — soup, beans, tuna, stew','罐頭——湯、焗豆、吞拿魚、燉肉','Ready to eat cold if needed','必要時可直接冷食',x=>[x.n*x.d,'tins','罐']],
+['food','f2','Biscuits, crackers or cereal bars','餅乾、梳打餅或穀物棒','Breakfast and snacks','早餐及小食',x=>[x.n*x.d,'packs','包']],
+['food','f3','Dried fruit and nuts','乾果及果仁','Small bags for quick energy','小包裝，補充體力',x=>[x.n*x.d,'bags','包']],
+['food','f4','Long-life milk or juice','長期保存牛奶或果汁','UHT cartons need no fridge','UHT 紙盒裝毋須雪櫃',x=>[x.n*x.d,'cartons','盒']],
+['food','f5','Cup noodles or instant rice','杯麵或即食飯','Needs hot water — only if your gas hob lights with a match, or a camping stove used outdoors','需要熱水——煤氣爐可用火柴點著，或在室外使用露營爐才適合',x=>[Math.ceil(x.n*x.d/2),'cups','杯']],
+['food','f6','Manual tin opener','手動開罐器','',''],
+['food','f7','Food that fits special diets','符合特別飲食需要的食物','Allergy-safe, halal, vegetarian etc. — label it','如防敏感、清真、素食——貼上標籤',null,x=>x.s.has('diet')],
+['light','l1','Torch','電筒','One for each room you’d use','每個常用房間一支',x=>[Math.max(1,Math.ceil(x.n/2)),'','支']],
+['light','l2','Spare batteries','後備電池','Check sizes match your torch and radio','確認尺寸配合電筒及收音機'],
 ['light','l3','Battery lantern','電池營燈','Safer than candles, especially with children','比蠟燭安全，家有小朋友尤其重要',null,x=>x.t.has('power')],
-['light','l4','Blankets or sleeping bags','毛毯或睡袋','',' ',x=>[x.n,'','張']],
-['light','l5','Warm clothes and hats','保暖衣物及帽','Layers keep heat in when heating is off','暖氣停了，多層衣物最保暖',null],
-['comms','c1','Wind-up or battery radio','手搖或電池收音機','For local news if phones and internet fail','電話網絡失效時收聽本地新聞',null],
-['comms','c2','Fully charged power bank','已充滿電的充電寶','Recharge it every few months',' 每幾個月補充一次電',x=>[Math.max(1,Math.ceil((x.a+x.e+x.c)/2)),'',' 個']],
-['comms','c3','Charging cables','充電線','',''],
-['comms','c4','Offline maps and saved info on phone','手機下載離線地圖及資料','',''],
-['docs','d1','Cash, including coins','現金（包括硬幣）','Shops may only take cash if card systems are down','拍卡系統失靈時商店可能只收現金',null],
-['docs','d2','Copies of ID and key documents','身份證明及重要文件副本','In a waterproof bag','放入防水袋',null],
+['light','l4','Blankets or sleeping bags','毛毯或睡袋','','',x=>[x.n,'','張']],
+['light','l5','Warm clothes and hats','保暖衣物及帽','Layers keep heat in when heating is off','暖氣停了，多層衣物最保暖'],
+['comms','c1','Wind-up or battery radio','手搖或電池收音機','For local news if phones and internet fail','電話網絡失效時收聽本地新聞'],
+['comms','c2','Fully charged power bank','已充滿電的充電寶','Recharge it every few months','每幾個月補充一次電',x=>[Math.max(1,Math.ceil((x.a+x.e+x.c)/2)),'','個']],
+['comms','c3','Charging cables, including a car charger','充電線（包括車用充電器）','',''],
+['docs','d1','Cash, including coins','現金（包括硬幣）','Shops may only take cash if card systems are down','拍卡系統失靈時商店可能只收現金'],
+['docs','d2','Copies of ID and key documents','身份證明及重要文件副本','In a waterproof bag','放入防水袋'],
 ['docs','d3','Important phone numbers on paper','紙本重要電話','',''],
-['docs','d4','2-step verification backup codes on paper','雙重認證備用碼（紙本）','So you can still log in from another device','以便用其他裝置登入',null,x=>x.t.has('cyber')],
 ['health','h1','First aid kit','急救箱','',''],
 ['health','h2','Essential medicines','必需藥物','Ask your pharmacy about ordering repeat prescriptions early','向藥房查詢提早續藥',x=>[x.d,'days’ supply','日份量'],x=>x.s.has('meds')],
 ['health','h3','List of medicines and doses','藥物名稱及劑量清單','On paper, for each person who takes them','每位服藥者各一份紙本',null,x=>x.s.has('meds')||x.e>0],
 ['health','h4','Hand sanitiser and wet wipes','搓手液及濕紙巾','',''],
 ['health','h5','Toilet roll, bin bags, period products','廁紙、垃圾袋、衞生用品','',''],
-['health','h6','Thermometer, paracetamol, face masks','體溫計、撲熱息痛、口罩','',' ',null,x=>x.t.has('ill')],
-['health','h7','Spare batteries / charger for mobility aids','行動輔助器材的後備電池或充電器','',' ',null,x=>x.s.has('mob')],
+['health','h6','Thermometer, paracetamol, face masks','體溫計、撲熱息痛、口罩','','',null,x=>x.t.has('ill')],
+['health','h7','Spare batteries or charger for mobility aids','行動輔助器材的後備電池或充電器','','',null,x=>x.s.has('mob')],
 ['family','k1','Ready-to-feed baby formula','即飲嬰兒奶','No need for boiled water','毋須煲水沖調',null,x=>x.i>0],
-['family','k2','Nappies and baby wipes','尿片及嬰兒濕紙巾','About 8 nappies per baby per day','每名嬰兒每日約 8 片',x=>[8*x.i*x.d,'','片'],x=>x.i>0],
-['family','k3','Games, books, a comfort toy','遊戲、圖書、安撫玩具','Helps children feel safe without screens','冇電視電腦時讓小朋友安心',null,x=>x.c+x.i>0],
-['family','k4','Pet food','寵物糧','Plus bottled water for pets',' 另備寵物飲用水',x=>[x.d,'days','日'],x=>x.p>0],
-['family','k5','Pet lead, carrier and medicines','寵物繩、籠及藥物','',' ',null,x=>x.p>0],
+['family','k2','Nappies','尿片','About 8 per baby per day','每名嬰兒每日約 8 片',x=>[8*x.i*x.d,'','片'],x=>x.i>0],
+['family','k3','Baby wipes','嬰兒濕紙巾','','',null,x=>x.i>0],
+['family','k4','Games, books, a comfort toy','遊戲、圖書、安撫玩具','Helps children feel safe without screens','冇電視電腦時讓小朋友安心',null,x=>x.c+x.i>0],
+['family','k5','Pet food','寵物糧','Plus bottled water for pets','另備寵物飲用水',x=>[x.d,'days','日份量'],x=>x.p>0],
+['family','k6','Pet lead, carrier and medicines','寵物繩、籠及藥物','','',null,x=>x.p>0],
 ['plan','p1','Agree a meeting point and out-of-area contact','約定集合點及外地聯絡人','',''],
-['plan','p2','Swap contact details with neighbours','與鄰居交換聯絡方法','Ask if anyone may need extra help','問問有沒有人需要額外幫助',null],
-['plan','p3','Check Priority Services Register','查詢「優先服務名冊」(PSR)','Free extra support from energy and water companies','能源及水務公司提供的免費支援',null,x=>x.e>0||x.i>0||x.s.has('mob')||x.s.has('meds')],
-['plan','p4','Know how to switch off gas, electricity and water','學會關掉煤氣、電和水總掣','',' ',null,x=>x.t.has('flood')],
-['plan','p5','Sign up for flood and weather warnings','訂閱水浸及天氣警告','',' ',null,x=>x.t.has('flood')],
+['plan','p2','Swap contact details with neighbours','與鄰居交換聯絡方法','Ask if anyone may need extra help','問問有沒有人需要額外幫助'],
+['plan','p3','Check the Priority Services Register','查詢「優先服務名冊」(PSR)','Free extra support from energy and water companies','能源及水務公司提供的免費支援',null,x=>x.e>0||x.i>0||x.s.has('mob')||x.s.has('meds')],
+['plan','p4','Know how to switch off gas, electricity and water','學會關掉煤氣、電和水總掣','','',null,x=>x.t.has('flood')],
+['plan','p5','Sign up for flood and weather warnings','訂閱水浸及天氣警告','','',null,x=>x.t.has('flood')],
 ['plan','p6','Keep Emergency Alerts on your phone','手機開啟「緊急警報」','',''],
-['plan','p7','Set a reminder to check your kit every 6 months','設定每半年檢查物資提醒','Use the reminder button above','用上方「半年提醒」按鈕',null]
+['plan','p7','Set a reminder to check your kit every 6 months','設定每半年檢查物資提醒','Use the reminder button above','用上方「半年提醒」按鈕']
+];
+
+// Digital readiness: [key, tabEn, tabZh, headEn, headZh, descEn, descZh, iconPath, items:[id,en,zh,dEn,dZh,url?]]
+const DIG=[
+['net','No signal','斷網／冇訊號','When phones and internet go quiet','當電話同網絡靜晒','A power cut can take broadband, Wi-Fi calling and digital landlines down together — and you may not get news online.','停電可以令寬頻、Wi-Fi 通話同數碼固網一齊斷——網上新聞都睇唔到。','M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01M3 3l18 18',[
+ ['n1','Check how your landline works in a power cut','了解停電時固網電話能否使用','Digital landlines need mains power and won’t work in a power cut without a battery back-up. If someone relies on the landline or a care alarm, tell your provider — they must make sure you can reach 999.','數碼固網要靠電源，停電時除非有後備電池，否則用不到。如家人依賴固網或平安鐘，請通知供應商——他們必須確保你能致電 999。','https://www.ofcom.org.uk/phones-and-broadband/landline-phones/future-of-landline-calls'],
+ ['n2','Deaf or speech-impaired? Register for emergencySMS','聽障或言語障礙？登記 emergencySMS','Text “register” to 999 in advance so you can contact 999 by text in an emergency.','預先發短訊「register」到 999，緊急時便可用短訊聯絡 999。','https://www.emergencysms.net/'],
+ ['n3','Download offline maps of your area','下載本區離線地圖','Google Maps: profile → Offline maps. Apple Maps: profile → Offline Maps. Include the route to your meeting point.','Google 地圖：個人頭像 → 離線地圖；Apple 地圖：個人頭像 → 離線地圖。記得包括去集合點的路線。'],
+ ['n4','Save key files to your phone and print them','把重要文件存入手機並打印','Home insurance policy and claim number, tenancy or mortgage details, NHS numbers, repeat prescriptions, vet and GP details.','家居保險單及索償電話、租約或按揭資料、NHS 號碼、長期處方、獸醫及家庭醫生資料。'],
+ ['n5','Agree a no-signal plan','約定「冇訊號」計劃','If phones are down: where everyone goes, and a fixed check-in time (e.g. the meeting point at 6pm).','電話不通時：各人去哪裡集合，定一個固定時間（例如晚上 6 點到集合點）。']
+]],
+['pay','Card payments down','拍卡／網上銀行停頓','When you can’t tap or bank online','當拍唔到卡、上唔到網銀','Outages and cyber attacks can stop card machines, cash machines and banking apps at the same time.','系統故障或網絡攻擊可以令拍卡機、提款機同銀行 App 同時停擺。','M2 7h20v10H2zM2 11h20M6 15h3',[
+ ['p1','Keep cash in small notes and coins','預備散紙及硬幣','Enough for a few days of food, fuel or a taxi — shops may switch to cash only.','足夠幾日買食物、入油或坐的士——商店可能只收現金。'],
+ ['p2','Carry a second card from a different bank','準備另一間銀行的卡','Outages often hit one bank at a time, so a second account keeps you paying.','故障通常只影響一間銀行，有第二個戶口就仍然可以付款。'],
+ ['p3','Write down your bank’s number — or remember 159','抄低銀行電話——或記住 159','159 connects you safely to most UK banks if you’re unsure a call or message is genuine.','如懷疑來電或訊息是否真確，致電 159 可安全接通大部分英國銀行。'],
+ ['p4','Top up prepayment meters before storms','風暴前為預付電錶／煤氣錶增值','Top-up shops and apps may be down during an outage.','停電時增值店舖及 App 可能用不到。'],
+ ['p5','Don’t let the car run low when warnings are issued','收到警告時別讓車子油量太低','Fuel pumps need power and card systems; EVs need charging points.','油泵要電力及拍卡系統；電動車要充電站。']
+]],
+['acct','Locked out','帳戶被鎖','If you lose your phone or an account is hacked','手機遺失或帳戶被入侵','Your email and phone unlock everything else. Losing either during a crisis can lock you out of banking and gov services.','電郵同手機係所有帳戶的鎖匙。危機中失去任何一樣，都可能登入唔到銀行同政府服務。','M6 11V8a6 6 0 0 1 12 0v3M4 11h16v10H4zM12 15v2',[
+ ['a1','Print backup codes for your main email and Apple ID / Google account','打印主要電郵及 Apple ID／Google 帳戶的備用碼','Store them with your documents, not in your phone.','與重要文件一起存放，不要只存在手機。'],
+ ['a2','Set up recovery contacts','設定帳戶救援聯絡人','Apple: Recovery Contact. Google: recovery phone and email. Pick someone you trust in another household.','Apple：救援聯絡人；Google：救援電話及電郵。選一位住在別處、你信任的人。'],
+ ['a3','Give your email a strong, unique password and 2-step verification','電郵使用獨立強密碼及雙重認證','Whoever controls your email can reset everything else.','誰控制你的電郵，就能重設你所有其他帳戶。'],
+ ['a4','Keep a spare phone or tablet charged and signed in','準備一部已登入、已充電的後備手機或平板','An old device in a drawer can save you if your main phone is lost or broken.','主手機遺失或損壞時，抽屜裡的舊裝置可以救急。'],
+ ['a5','Seal your password manager’s emergency sheet at home','密封保存密碼管理器的緊急資料','Most password managers offer an emergency kit — print it and keep it somewhere safe.','大部分密碼管理器提供緊急資料表——打印並妥善保存。']
+]],
+['scam','Crisis scams','危機騙案','Scammers move fast after a crisis','危機一來，騙徒就出動','Fake “refund”, “compensation” or “supplies” messages spike during emergencies.','緊急事件期間，假「退款」、「賠償」、「物資」訊息會大增。','M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6zM12 8v5M12 16h.01',[
+ ['s1','Know that Emergency Alerts never ask you to do anything online','緊急警報從不要求你上網操作','Real alerts never ask for a reply, a link click or personal details.','真正的警報不會要求你回覆、點擊連結或提供個人資料。'],
+ ['s2','Forward scam texts to 7726','將詐騙短訊轉發到 7726','It’s free and helps networks block the sender.','免費，並幫助電訊商封鎖發送者。'],
+ ['s3','Hang up and call back on a number you trust','掛線，再用你信任的號碼回撥','Use the number on your card or bill, or 159 for your bank.','用卡背或帳單上的號碼，或致電 159 聯絡銀行。'],
+ ['s4','Check charity appeals before giving','捐款前核實慈善機構','Look up the registered charity number on the Charity Commission register.','在慈善委員會登記冊查核其註冊編號。','https://register-of-charities.charitycommission.gov.uk/'],
+ ['s5','Know where to report fraud','知道去哪裡舉報詐騙','England, Wales and NI: Report Fraud online or 0300 123 2040. Scotland: Police Scotland on 101.','英格蘭、威爾斯及北愛：Report Fraud 網上或 0300 123 2040；蘇格蘭：致電 101 聯絡蘇格蘭警方。','https://www.reportfraud.police.uk/']
+]],
+['home','Home tech','家中裝置','Keep your devices and data safe','保護裝置同資料','A few small set-ups now mean your photos, files and Wi-Fi survive a short outage or attack.','而家做好幾樣小設定，相片、文件同 Wi-Fi 就捱得過短時間停電或攻擊。','M3 11 12 4l9 7v9H3zM9 20v-5h6v5',[
+ ['h1','Back up photos and documents twice','相片及文件雙重備份','One copy in the cloud and one on a USB drive kept at home.','一份存雲端，一份存家中的 USB 硬碟。'],
+ ['h2','Turn on automatic updates — phone, laptop and router','開啟自動更新——手機、電腦及路由器','Many cyber attacks use flaws that already have a fix.','很多網絡攻擊利用的漏洞早已有修補。'],
+ ['h3','Consider a small UPS for your router and fibre box','考慮為路由器及光纖盒加小型 UPS','Keeps Wi-Fi running through short power cuts, if the wider network is still up.','短時間停電時保持 Wi-Fi 運作（前提是外部網絡仍正常）。'],
+ ['h4','Write down your Wi-Fi password and learn to use your phone hotspot','抄低 Wi-Fi 密碼，學會開手機熱點','So family members can still get online from one working phone.','只要一部手機有訊號，全家都可以上網。'],
+ ['h5','Use Low Power Mode early','及早開啟省電模式','Switch it on as soon as the power goes off, not when you’re down to 10%.','一停電就開，不要等到剩 10% 先開。']
+]]
 ];
 
 function ctx(){return{a:S.a,c:S.c,i:S.i,e:S.e,p:S.p,n:Math.max(1,S.a+S.c+S.i+S.e),d:S.d,t:new Set(S.t),s:new Set(S.s)}}
-function active(){const x=ctx();return ITEMS.filter(it=>!it[7]||it[7](x)).map(it=>{const q=it[6]?it[6](x):null;return{cat:it[0],id:it[1],name:L(it[2],it[3]),note:L(it[4],it[5]).trim(),q:q?(S.lang==='zh'?q[0]+q[2]:q[0]+(q[1]?' '+q[1]:'')):''}})}
+function all(){
+  const x=ctx();
+  const base=ITEMS.filter(it=>!it[7]||it[7](x)).map(it=>{const q=it[6]?it[6](x):null;return{cat:it[0],id:it[1],name:L(it[2],it[3]),note:L(it[4]||'',it[5]||''),need:q?q[0]:0,unit:q?L(q[1],q[2]):''}});
+  const mine=S.mine.map(m=>({cat:CATS[m.cat]?m.cat:'other',id:m.id,name:m.name,note:'',need:+m.need||0,unit:m.unit||'',mine:1}));
+  return base.concat(mine);
+}
+const visible=()=>all().filter(it=>!S.hid[it.id]);
+const val=it=>it.need?Math.min((+S.have[it.id]||0)/it.need,1):(S.done[it.id]?1:0);
+const qtxt=(n,u)=>S.lang==='zh'?`${n}${u}`:`${n}${u?' '+u:''}`;
 
 function controls(){
   $('people').innerHTML=PEOPLE.map(([k,en,zh,se,sz])=>`<div class="row"><div>${L(en,zh)}${se?`<small>${L(se,sz)}</small>`:''}</div><div class="stp"><button data-k="${k}" data-v="-1" aria-label="−">−</button><output>${S[k]}</output><button data-k="${k}" data-v="1" aria-label="+">+</button></div></div>`).join('');
   $('days').innerHTML=DAYS.map(([v,en,zh])=>`<button class="chip" data-d="${v}" aria-pressed="${S.d===v}">${L(en,zh)}</button>`).join('');
   $('threats').innerHTML=THREATS.map(([k,en,zh])=>`<button class="chip" data-t="${k}" aria-pressed="${S.t.includes(k)}">${L(en,zh)}</button>`).join('');
   $('special').innerHTML=SPECIAL.map(([k,en,zh])=>`<button class="chip" data-s="${k}" aria-pressed="${S.s.includes(k)}">${L(en,zh)}</button>`).join('');
+  const cur=$('aCat').value||'food';
+  $('aCat').innerHTML=Object.entries(CATS).map(([k,c])=>`<option value="${k}"${k===cur?' selected':''}>${L(c[0],c[1])}</option>`).join('');
+  $('aName').placeholder=L('Item, e.g. Rich Tea biscuits','項目，例如：嘉頓梳打餅');
+  $('aQty').placeholder=L('Qty','數量');$('aUnit').placeholder=L('Unit, e.g. packs','單位，例如：包');
 }
 function contact(){
   const F=[['local','Local emergency contact','本地緊急聯絡人'],['away','Out-of-area contact','外地聯絡人'],['meet','Meeting point','集合地點'],['neigh','Neighbour','鄰居'],['gp','GP surgery','家庭醫生診所'],['supplier','Electricity supplier','電力供應商']];
-  $('contact').innerHTML=F.map(([k,en,zh])=>`<label>${L(en,zh)}<input data-ct="${k}" value="${esc(S.ct[k]||'')}" autocomplete="off"></label>`).join('');
+  $('contact').innerHTML=F.map(([k,en,zh])=>`<label>${L(en,zh)}<input data-ct="${k}" value="${esc(S.ct[k])}" autocomplete="off"></label>`).join('');
+}
+function row(it){
+  const v=val(it),cls=v>=1?' done':v>0?' part':'';
+  const qty=it.need?`<div class="qw"><input type="number" min="0" inputmode="numeric" data-h="${it.id}" value="${S.have[it.id]??''}" placeholder="0" aria-label="${L('How many you have','已有數量')}"><span>/ <b>${qtxt(it.need,esc(it.unit))}</b></span></div>`:'';
+  return `<div class="item${cls}"><label class="chk"><input type="checkbox" data-id="${it.id}" ${v>=1?'checked':''}><span class="t"><span>${esc(it.name)}</span>${it.mine?`<span class="mine">${L('Mine','自訂')}</span>`:''}${it.note?`<small>${esc(it.note)}</small>`:''}</span></label>${qty}<button class="x" data-x="${it.id}" aria-label="${L('Remove','移除')}" title="${L(it.mine?'Delete':'Hide','刪除')}">×</button></div>`;
 }
 function render(){
-  const items=active();let done=0;
-  const groups={};items.forEach(it=>{(groups[it.cat]=groups[it.cat]||[]).push(it);if(S.done[it.id])done++});
-  $('list').innerHTML=Object.keys(CATS).filter(c=>groups[c]).map(c=>`<div class="cat" style="--c:${CATS[c][2]}"><h4><i></i>${L(CATS[c][0],CATS[c][1])}</h4>${groups[c].map(it=>`<label class="item${S.done[it.id]?' done':''}"><input type="checkbox" data-id="${it.id}" ${S.done[it.id]?'checked':''}><span class="t"><span>${it.name}</span>${it.note?`<small>${it.note}</small>`:''}</span>${it.q?`<span class="q">${it.q}</span>`:''}</label>`).join('')}</div>`).join('');
-  const pct=items.length?Math.round(done/items.length*100):0;
+  const items=visible(),groups={};let sum=0;
+  items.forEach(it=>{(groups[it.cat]=groups[it.cat]||[]).push(it);sum+=val(it)});
+  const meals=3*ctx().n*S.d;
+  $('list').innerHTML=Object.keys(CATS).filter(c=>groups[c]).map(c=>`<div class="cat" style="--c:${CATS[c][2]}"><h4><i></i>${L(CATS[c][0],CATS[c][1])}${c==='food'?` · ${L('aim for about '+meals+' meals','目標約 '+meals+' 餐')}`:''}</h4>${groups[c].map(row).join('')}</div>`).join('');
+  const pct=items.length?Math.round(sum/items.length*100):0,done=items.filter(it=>val(it)>=1).length;
   $('ring').style.setProperty('--p',pct);$('pct').textContent=pct+'%';
-  const n=S.a+S.c+S.i+S.e,dl=DAYS.find(d=>d[0]===S.d);
+  const n=S.a+S.c+S.i+S.e,dl=DAYS.find(d=>d[0]===S.d)||DAYS[0];
   $('sum').textContent=L(`${n} ${n===1?'person':'people'}${S.p?` + ${S.p} pet${S.p>1?'s':''}`:''} · ${dl[1]}`,`${n} 人${S.p?` + ${S.p} 隻寵物`:''} · ${dl[2]}`);
-  $('sub').textContent=L(`${done} of ${items.length} ready`,`已準備 ${done} / ${items.length} 項`);
-  const miss=items.filter(it=>!S.done[it.id]&&it.cat!=='plan');
+  $('sub').textContent=L(`${done} of ${items.length} items complete`,`已完成 ${done} / ${items.length} 項`);
+  const miss=items.filter(it=>val(it)<1&&it.cat!=='plan');
   $('shopN').textContent=miss.length;
-  $('shop').innerHTML=miss.map(it=>`<li>${it.name}${it.q?` — <b>${it.q}</b>`:''}</li>`).join('')||`<li>${L('All set — well done!','全部準備好，做得好！')}</li>`;
+  $('shop').innerHTML=miss.map(it=>`<li>${esc(it.name)}${it.need?` — <b>${qtxt(it.need-(+S.have[it.id]||0),esc(it.unit))}</b>`:''}</li>`).join('')||`<li>${L('All set — well done!','全部準備好，做得好！')}</li>`;
+  const h=all().filter(it=>S.hid[it.id]).length;
+  $('restore').hidden=!h;$('restore').textContent=L(`${h} hidden item${h>1?'s':''} · Show again`,`已隱藏 ${h} 項 · 重新顯示`);
 }
-function setLang(l){S.lang=l;document.documentElement.dataset.lang=l;document.documentElement.lang=l==='zh'?'zh-Hant':'en';document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===l));controls();contact();render();save()}
+function digital(){
+  const total=DIG.reduce((a,d)=>a+d[8].length,0),got=DIG.reduce((a,d)=>a+d[8].filter(i=>S.dg[i[0]]).length,0);
+  const pct=Math.round(got/total*100);
+  $('dring').style.setProperty('--p',pct);$('dpct').textContent=pct+'%';
+  $('dsum').textContent=L('Your digital readiness','你的數碼備災程度');
+  $('dsub').textContent=L(`${got} of ${total} steps done`,`已完成 ${got} / ${total} 步`);
+  if(!DIG.some(d=>d[0]===S.tab))S.tab=DIG[0][0];
+  $('dtabs').innerHTML=DIG.map(d=>`<button class="dtab" role="tab" data-tab="${d[0]}" aria-selected="${S.tab===d[0]}">${L(d[1],d[2])}<small>${d[8].filter(i=>S.dg[i[0]]).length}/${d[8].length}</small></button>`).join('');
+  const d=DIG.find(d=>d[0]===S.tab);
+  $('dpanel').innerHTML=`<div class="dside"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d[7]}"/></svg><h3>${L(d[3],d[4])}</h3><p class="dfade">${L(d[5],d[6])}</p></div><div>${d[8].map(i=>`<label class="ditem"><input type="checkbox" data-dg="${i[0]}" ${S.dg[i[0]]?'checked':''}><span><b>${L(i[1],i[2])}</b><p class="dfade">${L(i[3],i[4])}${i[5]?` <a href="${i[5]}" rel="noopener">${L('More','詳情')} ↗</a>`:''}</p></span></label>`).join('')}</div>`;
+}
+function setLang(l){S.lang=l;document.documentElement.dataset.lang=l;document.documentElement.lang=l==='zh'?'zh-Hant':'en';document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===l));controls();contact();render();digital();save()}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2200)}
 
 document.querySelector('.lang').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setLang(b.dataset.l)});
@@ -347,12 +452,32 @@ document.querySelector('.panel').addEventListener('click',e=>{
   else if(b.dataset.s){const k=b.dataset.s;S.s=S.s.includes(k)?S.s.filter(x=>x!==k):[...S.s,k]}
   controls();render();save();
 });
-$('list').addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;if(e.target.checked)S.done[id]=1;else delete S.done[id];render();save()});
+$('list').addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset.id){const it=all().find(i=>i.id===el.dataset.id);if(!it)return;
+    if(it.need)S.have[it.id]=el.checked?it.need:0;else if(el.checked)S.done[it.id]=1;else delete S.done[it.id];
+    render();save();}
+  else if(el.dataset.h){S.have[el.dataset.h]=Math.max(0,Math.floor(+el.value||0));render();save()}
+});
+$('list').addEventListener('click',e=>{
+  const b=e.target.closest('[data-x]');if(!b)return;const id=b.dataset.x;
+  if(S.mine.some(m=>m.id===id)){S.mine=S.mine.filter(m=>m.id!==id);delete S.have[id];delete S.done[id];toast(L('Item deleted','已刪除項目'))}
+  else{S.hid[id]=1;toast(L('Item hidden','已隱藏項目'))}
+  render();save();
+});
+$('restore').addEventListener('click',()=>{S.hid={};render();save()});
+$('addf').addEventListener('submit',e=>{
+  e.preventDefault();const name=$('aName').value.trim();if(!name)return;
+  S.mine.push({id:'u'+Date.now().toString(36),cat:$('aCat').value,name,need:Math.max(0,Math.floor(+$('aQty').value||0)),unit:$('aUnit').value.trim()});
+  $('aName').value='';$('aQty').value='';$('aUnit').value='';render();save();toast(L('Added to your list','已加入清單'));$('aName').focus();
+});
 $('contact').addEventListener('input',e=>{const k=e.target.dataset.ct;if(k){S.ct[k]=e.target.value;save()}});
-$('bReset').addEventListener('click',()=>{S.done={};render();save();toast(L('Ticks cleared','已清除剔選'))});
+$('dtabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b){S.tab=b.dataset.tab;digital();save()}});
+$('dpanel').addEventListener('change',e=>{const k=e.target.dataset.dg;if(!k)return;if(e.target.checked)S.dg[k]=1;else delete S.dg[k];digital();save()});
+$('bReset').addEventListener('click',()=>{S.done={};S.have={};render();save();toast(L('Ticks cleared','已清除剔選'))});
 $('bPrint').addEventListener('click',()=>{try{window.print()}catch(e){toast(L('Printing is blocked here — try Copy list','此處無法列印，請改用「複製清單」'))}});
 $('bCopy').addEventListener('click',async()=>{
-  const items=active();const txt=[L('PrepReady checklist','PrepReady 備災清單'),$('sum').textContent,''].concat(items.map(it=>`${S.done[it.id]?'[x]':'[ ]'} ${it.name}${it.q?' — '+it.q:''}`)).join('\n');
+  const txt=[L('PrepReady checklist','PrepReady 備災清單'),$('sum').textContent,''].concat(visible().map(it=>`${val(it)>=1?'[x]':'[ ]'} ${it.name}${it.need?` — ${+S.have[it.id]||0}/${qtxt(it.need,it.unit)}`:''}`)).join('\n');
   try{await navigator.clipboard.writeText(txt);toast(L('Checklist copied','已複製清單'))}catch(e){toast(L('Copy was blocked by the browser','瀏覽器阻止了複製'))}
 });
 $('bCal').addEventListener('click',()=>{
