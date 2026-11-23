@@ -1,1026 +1,367 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrepReady — Personal Emergency Kit Planner</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PrepReady · Be ready for 3 days</title>
+<meta name="description" content="Free bilingual (English / 繁體中文) emergency checklist for UK households, aligned with the UK Government's Be Ready campaign.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0d0f0e;
-  --bg2: #111413;
-  --surface: #161918;
-  --surface2: #1e2220;
-  --surface3: #242826;
-  --border: #2a2e2c;
-  --border2: #353a37;
-  --accent: #c8f060;
-  --accent2: #60f0c8;
-  --danger: #f06060;
-  --warn: #f0b860;
-  --text: #e8ede9;
-  --text2: #b8c4ba;
-  --muted: #6a7a6e;
-  --font-d: 'Syne', sans-serif;
-  --font-b: 'Instrument Sans', sans-serif;
-  --radius: 14px;
-  --transition: 0.2s ease;
-}
-[data-theme="light"] {
-  --bg: #f4f6f3;
-  --bg2: #eef0ec;
-  --surface: #ffffff;
-  --surface2: #f0f2ee;
-  --surface3: #e8ebe6;
-  --border: #d8dcd6;
-  --border2: #c8cdc5;
-  --accent: #5a8a00;
-  --accent2: #007a60;
-  --danger: #cc3030;
-  --warn: #b06000;
-  --text: #1a1f1b;
-  --text2: #3a4a3d;
-  --muted: #7a8a7e;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
-
-body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(200,240,96,0.05) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(96,240,200,0.03) 0%,transparent 60%);pointer-events:none;z-index:0;}
-[data-theme="light"] body::before{opacity:0.4;}
-
-.wrap{max-width:740px;margin:0 auto;padding:0 20px;position:relative;z-index:1;}
-
-/* ── HEADER ── */
-header{padding:24px 0 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);margin-bottom:40px;gap:12px;flex-wrap:wrap;}
-.logo{font-family:var(--font-d);font-weight:800;font-size:1.35rem;letter-spacing:-0.02em;}
-.logo span{color:var(--accent);}
-.header-controls{display:flex;gap:8px;align-items:center;}
-.ctrl-group{display:flex;gap:3px;background:var(--surface2);border-radius:8px;padding:3px;}
-.ctrl-btn{background:none;border:none;color:var(--muted);font-family:var(--font-b);font-size:0.78rem;font-weight:500;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all 0.2s;}
-.ctrl-btn.active{background:var(--accent);color:var(--bg);}
-.theme-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;cursor:pointer;color:var(--text);font-size:0.9rem;transition:all 0.2s;}
-.theme-btn:hover{border-color:var(--accent);}
-
-/* ── HERO ── */
-.hero{margin-bottom:48px;}
-.eyebrow{font-size:0.72rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--accent);}
-.hero h1{font-family:var(--font-d);font-weight:800;font-size:clamp(2rem,6vw,3.2rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:16px;}
-.hero h1 em{font-style:normal;color:var(--accent);}
-.hero p{font-size:1rem;line-height:1.7;color:var(--muted);max-width:500px;}
-
-/* ── PROGRESS TRACK ── */
-.prog-track{display:flex;gap:5px;margin-bottom:36px;}
-.prog-step{height:3px;flex:1;background:var(--border);border-radius:2px;transition:background 0.4s;}
-.prog-step.done{background:var(--accent);}
-.prog-step.cur{background:var(--accent);opacity:0.45;}
-
-/* ── STEPS ── */
-.step{display:none;animation:fadeUp 0.35s ease forwards;}
-.step.on{display:block;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-
-.step-lbl{font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.step-title{font-family:var(--font-d);font-weight:700;font-size:1.4rem;letter-spacing:-0.02em;margin-bottom:24px;line-height:1.2;}
-.step-subtitle{font-family:var(--font-d);font-weight:700;font-size:1.05rem;margin-bottom:14px;margin-top:20px;}
-
-/* ── COUNTER ── */
-.counter-row{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
-.cnt-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
-.cnt-btn:hover{border-color:var(--accent);color:var(--accent);}
-.cnt-num{font-family:var(--font-d);font-size:2.4rem;font-weight:800;color:var(--accent);min-width:44px;text-align:center;}
-.cnt-lbl{color:var(--muted);font-size:0.88rem;}
-
-/* ── AGE GROUPS ── */
-.age-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
-.age-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:10px;}
-.age-icon{font-size:1.3rem;}
-.age-info{flex:1;}
-.age-info label{display:block;font-size:0.82rem;font-weight:500;margin-bottom:6px;}
-.age-ctrl{display:flex;align-items:center;gap:8px;}
-.age-ctrl button{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
-.age-ctrl button:hover{border-color:var(--accent);color:var(--accent);}
-.age-ctrl span{font-family:var(--font-d);font-weight:700;font-size:0.95rem;min-width:18px;text-align:center;color:var(--accent);}
-
-/* ── THREATS ── */
-.threat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
-.t-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all 0.2s;position:relative;}
-.t-card.sel{border-color:var(--accent);background:rgba(200,240,96,0.05);}
-.t-check{position:absolute;top:10px;right:10px;width:17px;height:17px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.55rem;transition:all 0.2s;}
-.t-card.sel .t-check{background:var(--accent);border-color:var(--accent);color:var(--bg);}
-.t-icon{font-size:1.6rem;margin-bottom:8px;}
-.t-name{font-family:var(--font-d);font-weight:700;font-size:0.88rem;margin-bottom:3px;}
-.t-desc{font-size:0.72rem;color:var(--muted);line-height:1.4;}
-
-/* ── NEEDS ── */
-.needs-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:24px;}
-.need-chip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:9px;font-size:0.86rem;}
-.need-chip.sel{border-color:var(--accent2);background:rgba(96,240,200,0.06);color:var(--accent2);}
-.need-icon{font-size:1rem;}
-
-/* ── DURATION ── */
-.dur-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px;}
-.dur-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 16px;cursor:pointer;font-family:var(--font-b);font-size:0.88rem;color:var(--text);transition:all 0.2s;}
-.dur-btn.sel{border-color:var(--accent);background:rgba(200,240,96,0.08);color:var(--accent);}
-.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-bottom:24px;}
-.info-box p{font-size:0.8rem;color:var(--muted);line-height:1.6;}
-
-/* ── NAV BUTTONS ── */
-.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
-.btn-back{background:none;border:1px solid var(--border);border-radius:8px;padding:11px 18px;color:var(--muted);font-family:var(--font-b);font-size:0.88rem;cursor:pointer;transition:all 0.2s;}
-.btn-back:hover{border-color:var(--muted);color:var(--text);}
-.btn-next{background:var(--accent);border:none;border-radius:8px;padding:11px 26px;color:var(--bg);font-family:var(--font-d);font-size:0.92rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:7px;}
-.btn-next:hover{filter:brightness(1.08);transform:translateY(-1px);}
-
-/* ── RESULTS ── */
-.result-head{margin-bottom:28px;}
-.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.meta-tag{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 11px;font-size:0.76rem;color:var(--muted);}
-.meta-tag strong{color:var(--text);}
-
-/* ── PROGRESS RING ── */
-.prog-summary{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;display:flex;align-items:center;gap:18px;margin-bottom:22px;}
-.ring-wrap{position:relative;width:60px;height:60px;flex-shrink:0;}
-.ring-wrap svg{transform:rotate(-90deg);}
-.ring-bg{fill:none;stroke:var(--border);stroke-width:4;}
-.ring-fill{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 0.6s ease;}
-.ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:800;font-size:0.8rem;color:var(--accent);}
-.prog-txt h3{font-family:var(--font-d);font-weight:700;font-size:0.95rem;margin-bottom:3px;}
-.prog-txt p{font-size:0.8rem;color:var(--muted);}
-
-/* ── ACTION BUTTONS ── */
-.action-row{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
-.act-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:var(--font-b);font-size:0.82rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
-.act-btn:hover{border-color:var(--accent);color:var(--accent);}
-.act-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600;}
-.act-btn.primary:hover{filter:brightness(1.08);color:var(--bg);}
-
-/* ── CATEGORY BLOCK ── */
-.cat-block{margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color 0.2s;}
-.cat-head{padding:13px 18px;display:flex;align-items:center;gap:10px;background:var(--surface2);cursor:pointer;user-select:none;transition:background 0.15s;}
-.cat-head:hover{background:var(--surface3);}
-.cat-icon{font-size:1.1rem;}
-.cat-name{font-family:var(--font-d);font-weight:700;font-size:0.9rem;flex:1;}
-.cat-badge{font-size:0.72rem;color:var(--muted);background:var(--bg2);border-radius:20px;padding:2px 9px;}
-.cat-chevron{font-size:0.75rem;color:var(--muted);transition:transform 0.25s;}
-.cat-block.collapsed .cat-chevron{transform:rotate(-90deg);}
-.cat-body{border-top:1px solid var(--border);}
-.cat-block.collapsed .cat-body{display:none;}
-
-/* ── ITEM STATES ── */
-.item-row{display:flex;align-items:flex-start;gap:10px;padding:10px 18px;cursor:pointer;transition:background 0.12s;position:relative;}
-.item-row:hover{background:rgba(255,255,255,0.02);}
-[data-theme="light"] .item-row:hover{background:rgba(0,0,0,0.02);}
-.item-row+.item-row{border-top:1px solid var(--border);}
-
-/* State toggle button */
-.state-btn{width:26px;height:26px;border-radius:6px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;transition:all 0.15s;background:var(--surface2);cursor:pointer;}
-.state-btn.need{border-color:var(--warn);background:rgba(240,184,96,0.1);color:var(--warn);}
-.state-btn.have{border-color:var(--accent);background:rgba(200,240,96,0.12);color:var(--accent);}
-.item-row.need-buy .item-name::before{content:'🛒 ';font-size:0.75em;}
-.item-row.is-have{opacity:0.55;}
-
-.item-body{flex:1;min-width:0;}
-.item-name{font-size:0.88rem;font-weight:500;margin-bottom:2px;line-height:1.4;}
-.item-note{font-size:0.73rem;color:var(--muted);}
-.priority-high .item-name::after{content:' ●';color:var(--danger);font-size:0.45rem;vertical-align:middle;}
-
-/* Expiry */
-.item-expiry-row{display:flex;align-items:center;gap:6px;margin-top:5px;}
-.expiry-label{font-size:0.68rem;color:var(--muted);}
-.expiry-input{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:3px 7px;font-size:0.72rem;color:var(--text);font-family:var(--font-b);outline:none;transition:border-color 0.2s;width:130px;}
-.expiry-input:focus{border-color:var(--accent);}
-.expiry-badge{font-size:0.68rem;padding:2px 7px;border-radius:10px;font-weight:600;}
-.exp-ok{background:rgba(200,240,96,0.1);color:var(--accent);}
-.exp-warn{background:rgba(240,184,96,0.12);color:var(--warn);}
-.exp-danger{background:rgba(240,96,96,0.12);color:var(--danger);}
-
-/* Info tooltip */
-.info-trigger{font-size:0.65rem;color:var(--muted);border:1px solid var(--border);border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:2px;transition:all 0.15s;}
-.info-trigger:hover{border-color:var(--accent2);color:var(--accent2);}
-.info-popup{display:none;position:absolute;right:50px;top:8px;background:var(--surface3);border:1px solid var(--border2);border-radius:10px;padding:10px 13px;font-size:0.76rem;line-height:1.5;color:var(--text2);max-width:220px;z-index:10;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
-.info-trigger:focus+.info-popup,.info-trigger.open+.info-popup{display:block;}
-
-/* ── CUSTOM ITEMS ── */
-.add-custom{display:flex;gap:8px;padding:10px 18px;border-top:1px solid var(--border);}
-.custom-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;color:var(--text);font-family:var(--font-b);font-size:0.85rem;outline:none;transition:border-color 0.2s;}
-.custom-input:focus{border-color:var(--accent);}
-.custom-input::placeholder{color:var(--muted);}
-.add-btn{background:var(--accent);border:none;border-radius:7px;padding:7px 14px;color:var(--bg);font-family:var(--font-d);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
-.add-btn:hover{filter:brightness(1.08);}
-
-/* ── SHOPPING LIST VIEW ── */
-.shop-toggle{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
-.shop-toggle h3{font-family:var(--font-d);font-weight:700;font-size:0.95rem;display:flex;align-items:center;gap:8px;}
-.shop-list{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
-.shop-list.on{display:block;}
-.shop-item{font-size:0.85rem;padding:5px 0;border-bottom:1px solid var(--border);color:var(--text2);}
-.shop-item:last-child{border:none;}
-.shop-empty{color:var(--muted);font-size:0.82rem;font-style:italic;}
-
-/* ── EMERGENCY CARD ── */
-.ec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:22px;}
-.ec-card h3{font-family:var(--font-d);font-weight:700;font-size:0.95rem;margin-bottom:16px;display:flex;align-items:center;gap:7px;}
-.ec-row{display:flex;gap:8px;margin-bottom:7px;align-items:center;}
-.ec-lbl{font-size:0.74rem;color:var(--muted);width:140px;flex-shrink:0;}
-.ec-inp{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:var(--font-b);font-size:0.83rem;outline:none;transition:border-color 0.2s;}
-.ec-inp:focus{border-color:var(--accent);}
-
-/* ── FOOTER ── */
-footer{border-top:1px solid var(--border);padding:20px 0 36px;margin-top:36px;}
-.foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-footer p{font-size:0.76rem;color:var(--muted);}
-footer a{color:var(--accent);text-decoration:none;}
-footer a:hover{text-decoration:underline;}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:22px;right:22px;background:var(--surface3);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:0.78rem;color:var(--accent);opacity:0;transform:translateY(8px);transition:all 0.3s;z-index:100;pointer-events:none;}
-.toast.show{opacity:1;transform:translateY(0);}
-
-/* ── MODAL ── */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
-.modal-bg.on{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:24px;max-width:440px;width:100%;animation:fadeUp 0.25s ease;}
-.modal h3{font-family:var(--font-d);font-weight:700;font-size:1.1rem;margin-bottom:8px;}
-.modal p{font-size:0.84rem;color:var(--muted);line-height:1.6;margin-bottom:16px;}
-.modal textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:monospace;font-size:0.75rem;height:120px;resize:none;outline:none;margin-bottom:14px;}
-.modal-btns{display:flex;gap:8px;justify-content:flex-end;}
-.modal-btn{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 16px;color:var(--text);font-family:var(--font-b);font-size:0.85rem;cursor:pointer;transition:all 0.2s;}
-.modal-btn:hover{border-color:var(--accent);color:var(--accent);}
-.modal-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600;}
-.modal-btn.primary:hover{filter:brightness(1.08);color:var(--bg);}
-
-@media(max-width:480px){
-  .threat-grid,.age-grid,.needs-grid{grid-template-columns:1fr;}
-  .hero h1{font-size:1.9rem;}
-  .action-row{gap:6px;}
-  .act-btn{font-size:0.78rem;padding:8px 11px;}
-}
+/* VOICE: calm, warm, practical — a neighbour who has it sorted, readable by a 9-year-old.
+   IDEA: the household emergency box with its luggage tag — every section is a labelled card from that box.
+   PICTURE: cartoon house at dusk, family supply crate on the doorstep, torch beam and radio.
+   COLOUR and TYPE: high-vis signal orange field, deep ink, sky-blue support; Figtree 800 + Noto Sans TC.
+   LAYOUT: orange hero band edge to edge, then planner (settings left, live checklist right), steps, digital, numbers. */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#121416);--soft:light-dark(#f3f6fa,#1b1f24);--card:light-dark(#ffffff,#1d2228);
+--ink:light-dark(#14171a,#eef1f4);--mute:light-dark(#545d66,#a3adb8);--line:light-dark(#e2e7ed,#2c333b);
+--sig:#f05a1f;--sigink:#ffffff;--sky:light-dark(#2463d6,#7fb0ff);--skysoft:light-dark(#e6efff,#1d2a40);--ok:light-dark(#18864f,#5fd39b)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.6 Figtree,"Noto Sans TC",system-ui,sans-serif;overflow-x:clip}
+[data-lang=zh] body{font-family:"Noto Sans TC",Figtree,system-ui,sans-serif}
+[data-lang=en] .zh,[data-lang=zh] .en{display:none}
+a{color:var(--sky)}h1,h2,h3{line-height:1.08;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,42px);font-weight:800}h3{font-size:19px;font-weight:700}
+.wrap{max-width:1240px;margin:0 auto}.band{padding:clamp(36px,5vw,72px) max(5vw,16px)}
+html{scroll-padding-top:72px;scroll-behavior:smooth}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+/* header */
+header{position:sticky;top:0;z-index:5;background:var(--sig);color:var(--sigink)}
+.bar{display:flex;align-items:center;gap:16px;padding:10px max(5vw,16px);max-width:1240px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:inherit;text-decoration:none}
+nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto}nav a{color:inherit;text-decoration:none;padding:10px 12px;border-radius:10px;white-space:nowrap;font-weight:500}
+nav a:hover{background:#ffffff26}
+.lang{display:flex;background:#00000026;border-radius:12px;padding:3px}
+.lang button{border:0;background:none;color:#fff;padding:8px 12px;border-radius:9px;min-height:40px;font-weight:700}
+.lang button[aria-pressed=true]{background:#fff;color:var(--sig)}
+/* hero */
+.hero{background:var(--sig);color:#fff;padding-top:clamp(20px,3vw,40px)}
+.hgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(20px,4vw,56px);align-items:center}
+.tag{display:inline-flex;gap:8px;align-items:center;background:#fff;color:var(--ink);padding:6px 14px;border-radius:99px;font-weight:600;font-size:14px}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:900;margin:18px 0 16px;letter-spacing:-.01em}
+.hero p{font-size:18px;max-width:34em;margin:0 0 24px;color:#fff6f0}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:14px;font-weight:700;text-decoration:none;border:2px solid transparent}
+.btn.w{background:#fff;color:var(--ink)}.btn.o{border-color:#fff;color:#fff}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:28px}
+.facts div{background:#ffffff1f;border-radius:14px;padding:12px 14px}.facts b{display:block;font-size:26px;font-weight:900;line-height:1.1}.facts span{font-size:14px}
+.art svg{width:100%;height:auto;display:block}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:22px}
+.step .n{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--skysoft);color:var(--sky);font-weight:900;font-size:20px;margin-bottom:12px}
+.step ul{margin:10px 0 0;padding-left:20px;color:var(--mute)}.step li{margin:4px 0}
+.lede{color:var(--mute);max-width:44em;margin:10px 0 0;font-size:17px}
+/* planner */
+.planner{background:var(--soft)}
+.pgrid{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:22px;margin-top:28px;align-items:start}
+.panel{position:sticky;top:84px}
+.panel h3{margin:4px 0 12px}.panel section+section{margin-top:22px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.row small{display:block;color:var(--mute);font-size:13px}
+.stp{display:flex;align-items:center;gap:6px}.stp button{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-size:20px;line-height:1}
+.stp output{width:26px;text-align:center;font-weight:800;font-size:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--bg);border-radius:99px;padding:9px 14px;min-height:44px;font-weight:600;font-size:15px}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.note{font-size:13.5px;color:var(--mute);margin:10px 0 0}
+.listhead{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ring{--p:0;width:86px;height:86px;border-radius:50%;background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center;flex:none}
+.ring b{width:68px;height:68px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:20px;font-weight:900}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+.act{border:1.5px solid var(--line);background:var(--bg);border-radius:12px;min-height:44px;padding:0 14px;font-weight:600;font-size:14.5px}
+.cat{margin-top:22px}.cat h4{display:flex;align-items:center;gap:10px;font-size:15px;margin:0 0 6px;color:var(--mute);font-weight:700}
+.cat h4 i{width:12px;height:12px;border-radius:4px;background:var(--c)}
+.item{display:flex;gap:12px;align-items:flex-start;padding:11px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.item input{appearance:none;width:24px;height:24px;border:2px solid var(--mute);border-radius:7px;flex:none;margin:1px 0 0;display:grid;place-items:center;cursor:pointer}
+.item input:checked{background:var(--ok);border-color:var(--ok)}
+.item input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item .t{flex:1}.item .t small{display:block;color:var(--mute);font-size:13.5px}
+.item .q{font-weight:800;white-space:nowrap;color:var(--sky)}
+.item.done .t>span{text-decoration:line-through;color:var(--mute)}
+details.shop{margin-top:22px;border:1.5px dashed var(--line);border-radius:16px;padding:14px 18px}
+details.shop summary{font-weight:700;cursor:pointer;min-height:28px}
+.contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.contact label{font-size:13.5px;color:var(--mute);font-weight:600}
+.contact input{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);margin-top:4px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;transition:transform .25s;z-index:9}
+.toast.on{transform:translateX(-50%)}
+/* digital */
+.digital{background:var(--ink);color:var(--bg)}
+.digital .lede{color:color-mix(in srgb,var(--bg) 72%,transparent)}
+.dgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:28px}
+.dgrid div{border:1.5px solid color-mix(in srgb,var(--bg) 22%,transparent);border-radius:18px;padding:18px}
+.dgrid h3{font-size:17px;margin-bottom:6px}.dgrid p{margin:0;font-size:15px;color:color-mix(in srgb,var(--bg) 75%,transparent)}
+.dgrid svg{width:34px;height:34px;margin-bottom:10px;color:var(--sig)}
+/* numbers */
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:28px}
+.num b{display:block;font-size:clamp(26px,3vw,34px);font-weight:900;color:var(--sig);white-space:nowrap}
+.num p{margin:4px 0 0;color:var(--mute);font-size:15px}
+.links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+.links a{display:block;padding:16px 18px;border-radius:16px;background:var(--soft);text-decoration:none;color:var(--ink);font-weight:700}
+.links a small{display:block;color:var(--mute);font-weight:500;font-size:14px}
+footer{border-top:1.5px solid var(--line);padding:28px max(5vw,16px);color:var(--mute);font-size:14.5px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+@media (max-width:980px){.pgrid{grid-template-columns:minmax(0,1fr)}.panel{position:static}.dgrid,.nums{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.hgrid,.steps,.links{grid-template-columns:minmax(0,1fr)}nav{display:none}.contact{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:460px){.dgrid,.nums{grid-template-columns:minmax(0,1fr)}.facts b{font-size:21px}.acts{margin-left:0}}
+@media (prefers-reduced-motion:no-preference){.beam{animation:beam 3.2s ease-in-out infinite;transform-origin:396px 292px}@keyframes beam{50%{transform:rotate(-7deg)}}}
+@media print{header,.hero,.steps-band,.digital,.numbers,footer,.panel,.acts,.toast{display:none!important}.pgrid{display:block}.planner{background:#fff}.item{break-inside:avoid}}
 </style>
 </head>
 <body>
+<header><div class="bar">
+  <a class="logo" href="#top"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 4 12v16h24V12z" fill="#fff"/><rect x="10" y="17" width="12" height="8" rx="2" fill="#f05a1f"/><path d="M16 17v8M10 21h12" stroke="#fff" stroke-width="2"/></svg>PrepReady</a>
+  <nav aria-label="Sections"><a href="#plan"><span class="en">My checklist</span><span class="zh">我的清單</span></a><a href="#steps"><span class="en">3 steps</span><span class="zh">三個步驟</span></a><a href="#digital"><span class="en">Digital ready</span><span class="zh">數碼備災</span></a><a href="#numbers"><span class="en">Key numbers</span><span class="zh">重要電話</span></a></nav>
+  <div class="lang" role="group" aria-label="Language"><button data-l="en" aria-pressed="true">EN</button><button data-l="zh" aria-pressed="false">繁中</button></div>
+</div></header>
 
-<div class="wrap">
-<header>
-  <div class="logo">Prep<span>Ready</span></div>
-  <div class="header-controls">
-    <div class="ctrl-group">
-      <button class="ctrl-btn active" onclick="setLang('en')">EN</button>
-      <button class="ctrl-btn" onclick="setLang('zh')">繁中</button>
-    </div>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
-  </div>
-</header>
-
-<!-- HERO -->
-<div class="hero" id="heroSection">
-  <div class="eyebrow" data-i18n="eyebrow">Free · Personal · Always Ready</div>
-  <h1 data-i18n="h1">Be ready<br>before the<br><em>unexpected.</em></h1>
-  <p data-i18n="heroP">Answer 4 quick questions. Get a personalised emergency checklist tailored to your household — for natural disasters, conflict, or infrastructure failure.</p>
-</div>
-
-<!-- PROGRESS BAR -->
-<div class="prog-track" id="progTrack" style="display:none">
-  <div class="prog-step" id="ps1"></div>
-  <div class="prog-step" id="ps2"></div>
-  <div class="prog-step" id="ps3"></div>
-  <div class="prog-step" id="ps4"></div>
-</div>
-
-<!-- ════ STEP 1 ════ -->
-<div class="step on" id="s1">
-  <div class="step-lbl" data-i18n="s1lbl">Step 1 of 4</div>
-  <div class="step-title" data-i18n="s1title">How many people in your household?</div>
-  <div class="counter-row">
-    <button class="cnt-btn" onclick="adjCount(-1)">−</button>
-    <div class="cnt-num" id="memberNum">2</div>
-    <button class="cnt-btn" onclick="adjCount(1)">+</button>
-    <span class="cnt-lbl" data-i18n="people">people</span>
-  </div>
-  <div class="step-subtitle" data-i18n="whoTitle">Who's in your household?</div>
-  <div class="age-grid">
-    <div class="age-card"><div class="age-icon">👶</div><div class="age-info"><label data-i18n="infant">Infant (0–2)</label><div class="age-ctrl"><button onclick="adjAge('infant',-1)">−</button><span id="a-infant">0</span><button onclick="adjAge('infant',1)">+</button></div></div></div>
-    <div class="age-card"><div class="age-icon">🧒</div><div class="age-info"><label data-i18n="child">Child (3–12)</label><div class="age-ctrl"><button onclick="adjAge('child',-1)">−</button><span id="a-child">0</span><button onclick="adjAge('child',1)">+</button></div></div></div>
-    <div class="age-card"><div class="age-icon">🧑</div><div class="age-info"><label data-i18n="adult">Adult (13–64)</label><div class="age-ctrl"><button onclick="adjAge('adult',-1)">−</button><span id="a-adult">2</span><button onclick="adjAge('adult',1)">+</button></div></div></div>
-    <div class="age-card"><div class="age-icon">🧓</div><div class="age-info"><label data-i18n="elder">Elder (65+)</label><div class="age-ctrl"><button onclick="adjAge('elder',-1)">−</button><span id="a-elder">0</span><button onclick="adjAge('elder',1)">+</button></div></div></div>
-  </div>
-  <div class="step-nav"><div></div><button class="btn-next" onclick="goStep(2)"><span data-i18n="next">Next</span> →</button></div>
-</div>
-
-<!-- ════ STEP 2 ════ -->
-<div class="step" id="s2">
-  <div class="step-lbl" data-i18n="s2lbl">Step 2 of 4</div>
-  <div class="step-title" data-i18n="s2title">What threats concern you most?</div>
-  <div class="threat-grid">
-    <div class="t-card" onclick="togThreat('natural')" id="t-natural"><div class="t-check">✓</div><div class="t-icon">🌊</div><div class="t-name" data-i18n="tNat">Natural Disaster</div><div class="t-desc" data-i18n="tNatD">Earthquake, flood, typhoon, wildfire</div></div>
-    <div class="t-card" onclick="togThreat('conflict')" id="t-conflict"><div class="t-check">✓</div><div class="t-icon">⚠️</div><div class="t-name" data-i18n="tCon">Armed Conflict</div><div class="t-desc" data-i18n="tConD">War, civil unrest, evacuation orders</div></div>
-    <div class="t-card" onclick="togThreat('infra')" id="t-infra"><div class="t-check">✓</div><div class="t-icon">🔌</div><div class="t-name" data-i18n="tInf">Infrastructure Failure</div><div class="t-desc" data-i18n="tInfD">Power grid, water supply, internet outage</div></div>
-    <div class="t-card" onclick="togThreat('pandemic')" id="t-pandemic"><div class="t-check">✓</div><div class="t-icon">🦠</div><div class="t-name" data-i18n="tPan">Pandemic / Quarantine</div><div class="t-desc" data-i18n="tPanD">Disease outbreak, lockdown, isolation</div></div>
-  </div>
-  <div class="step-nav"><button class="btn-back" onclick="goStep(1)" data-i18n="back">← Back</button><button class="btn-next" onclick="goStep(3)"><span data-i18n="next">Next</span> →</button></div>
-</div>
-
-<!-- ════ STEP 3 ════ -->
-<div class="step" id="s3">
-  <div class="step-lbl" data-i18n="s3lbl">Step 3 of 4</div>
-  <div class="step-title" data-i18n="s3title">Any special considerations?</div>
-  <div class="needs-grid">
-    <div class="need-chip" onclick="togNeed('chronic')" id="n-chronic"><span class="need-icon">💊</span><span data-i18n="nChr">Chronic medication</span></div>
-    <div class="need-chip" onclick="togNeed('mobility')" id="n-mobility"><span class="need-icon">♿</span><span data-i18n="nMob">Mobility limitations</span></div>
-    <div class="need-chip" onclick="togNeed('pet')" id="n-pet"><span class="need-icon">🐾</span><span data-i18n="nPet">Pets</span></div>
-    <div class="need-chip" onclick="togNeed('diet')" id="n-diet"><span class="need-icon">🥗</span><span data-i18n="nDiet">Dietary restrictions</span></div>
-    <div class="need-chip" onclick="togNeed('baby')" id="n-baby"><span class="need-icon">🍼</span><span data-i18n="nBaby">Baby supplies</span></div>
-    <div class="need-chip" onclick="togNeed('none')" id="n-none"><span class="need-icon">✓</span><span data-i18n="nNone">None of the above</span></div>
-  </div>
-  <div class="step-nav"><button class="btn-back" onclick="goStep(2)" data-i18n="back">← Back</button><button class="btn-next" onclick="goStep(4)"><span data-i18n="next">Next</span> →</button></div>
-</div>
-
-<!-- ════ STEP 4 ════ -->
-<div class="step" id="s4">
-  <div class="step-lbl" data-i18n="s4lbl">Step 4 of 4</div>
-  <div class="step-title" data-i18n="s4title">How long do you want to prepare for?</div>
-  <div class="dur-row">
-    <button class="dur-btn" onclick="setDur(3)" id="d-3" data-i18n="d3">72 hours (minimum)</button>
-    <button class="dur-btn sel" onclick="setDur(7)" id="d-7" data-i18n="d7">1 week (recommended)</button>
-    <button class="dur-btn" onclick="setDur(30)" id="d-30" data-i18n="d30">1 month (advanced)</button>
-  </div>
-  <div class="info-box"><p data-i18n="durNote">Most governments recommend a minimum of 72 hours. In conflict or infrastructure scenarios, 1–2 weeks is more realistic.</p></div>
-  <div class="step-nav"><button class="btn-back" onclick="goStep(3)" data-i18n="back">← Back</button><button class="btn-next" onclick="buildResult()"><span data-i18n="generate">Generate My List</span> ✓</button></div>
-</div>
-
-<!-- ════ RESULTS ════ -->
-<div class="step" id="sResult">
-  <div class="result-head">
-    <div class="step-lbl" data-i18n="resLbl">Your personalised checklist</div>
-    <div class="step-title" data-i18n="resTitle">Emergency Prep List</div>
-    <div class="meta-row" id="metaRow"></div>
-  </div>
-
-  <div class="prog-summary">
-    <div class="ring-wrap"><svg width="60" height="60" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="26"/><circle class="ring-fill" id="ringFill" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/></svg><div class="ring-num" id="ringNum">0%</div></div>
-    <div class="prog-txt"><h3 data-i18n="progTitle">Preparation Progress</h3><p id="progDesc"></p></div>
-  </div>
-
-  <div class="action-row">
-    <button class="act-btn primary" onclick="window.print()" data-i18n="print">🖨 Print</button>
-    <button class="act-btn" onclick="shareList()" data-i18n="share">📤 Share</button>
-    <button class="act-btn" onclick="exportData()" data-i18n="export">💾 Export</button>
-    <button class="act-btn" onclick="showImport()" data-i18n="import">📂 Import</button>
-    <button class="act-btn" onclick="downloadICS()" data-i18n="remind">📅 Reminder</button>
-    <button class="act-btn" onclick="resetAll()" data-i18n="restart">↺ Restart</button>
-  </div>
-
-  <!-- Shopping list summary -->
-  <div class="shop-toggle" onclick="toggleShop()" id="shopToggle">
-    <h3>🛒 <span data-i18n="shopTitle">Shopping List</span> <span id="shopCount" style="color:var(--warn);font-size:0.85rem"></span></h3>
-    <span style="color:var(--muted);font-size:0.8rem" id="shopChevron">▼</span>
-  </div>
-  <div class="shop-list" id="shopList"></div>
-
-  <div id="checklistOut"></div>
-
-  <!-- Emergency contact card -->
-  <div class="ec-card">
-    <h3>📋 <span data-i18n="ecTitle">Emergency Contact Card</span></h3>
-    <div class="ec-row"><span class="ec-lbl" data-i18n="ec1">Local emergency:</span><input class="ec-inp" id="ec1" type="text" placeholder="999 / 112 / 110"></div>
-    <div class="ec-row"><span class="ec-lbl" data-i18n="ec2">Meeting point:</span><input class="ec-inp" id="ec2" type="text" placeholder="e.g. Park gate on Main St"></div>
-    <div class="ec-row"><span class="ec-lbl" data-i18n="ec3">Out-of-area contact:</span><input class="ec-inp" id="ec3" type="text" placeholder="Name + number"></div>
-    <div class="ec-row"><span class="ec-lbl" data-i18n="ec4">Evacuation route:</span><input class="ec-inp" id="ec4" type="text" placeholder="Primary + backup route"></div>
-  </div>
-</div>
-
-</div><!-- /wrap -->
-
-<footer>
-  <div class="wrap"><div class="foot-inner">
-    <p data-i18n="footLeft">PrepReady is free for everyone. No data leaves your device.</p>
-    <p>© 2026 <a href="https://billionstudio.co.uk" target="_blank">Billion Studio</a> · PrepReady v2.0</p>
-  </div></div>
-</footer>
-
-<div class="toast" id="toast"></div>
-
-<!-- Export/Import Modal -->
-<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
-  <div class="modal">
-    <h3 id="modalTitle">Backup Data</h3>
-    <p id="modalDesc">Copy this code to save your progress. Paste it back using Import to restore.</p>
-    <textarea id="modalTA" spellcheck="false"></textarea>
-    <div class="modal-btns">
-      <button class="modal-btn" onclick="closeModal()">Close</button>
-      <button class="modal-btn primary" id="modalAction">Copy</button>
+<main id="top">
+<section class="hero band"><div class="wrap hgrid">
+  <div>
+    <span class="tag"><span class="en">Based on the UK Government’s “Be Ready” advice · 2026</span><span class="zh">參考英國政府「Be Ready」備災指引 · 2026</span></span>
+    <h1><span class="en">Ready for 3 days. Calm for every day.</span><span class="zh">預備好三日，日日都安心。</span></h1>
+    <p><span class="en">Power cut, flood, storm or a cyber attack that takes services offline — a few simple steps help your household cope on its own for 72 hours. Build your free, personal checklist in one minute.</span><span class="zh">停電、水浸、風暴，或網絡攻擊令服務癱瘓——只要做好幾個簡單步驟，全家就能自己應付 72 小時。一分鐘建立你的免費個人清單。</span></p>
+    <div class="cta"><a class="btn w" href="#plan"><span class="en">Build my checklist</span><span class="zh">建立我的清單</span> →</a><a class="btn o" href="https://beready.campaign.gov.uk/" rel="noopener"><span class="en">Official Be Ready site</span><span class="zh">政府官方網站</span></a></div>
+    <div class="facts">
+      <div><b>3 <span class="en">days</span><span class="zh">日</span></b><span class="en">of supplies at home</span><span class="zh">家中儲備物資</span></div>
+      <div><b>3 L</b><span class="en">water / person / day</span><span class="zh">每人每日飲用水</span></div>
+      <div><b>6 <span class="en">months</span><span class="zh">個月</span></b><span class="en">check & refresh</span><span class="zh">檢查更新一次</span></div>
     </div>
   </div>
-</div>
+  <div class="art" aria-hidden="true">
+  <svg viewBox="0 0 560 440"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb37a"/><stop offset="1" stop-color="#ff8a4c"/></linearGradient><radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff6c8"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></radialGradient></defs>
+  <rect x="10" y="10" width="540" height="420" rx="36" fill="url(#sky)"/>
+  <circle cx="460" cy="90" r="38" fill="#fff3d6"/><circle cx="448" cy="82" r="38" fill="#ff9d5e"/>
+  <g fill="#fff" opacity=".85"><ellipse cx="120" cy="80" rx="44" ry="16"/><ellipse cx="150" cy="70" rx="30" ry="16"/><ellipse cx="330" cy="60" rx="36" ry="12"/></g>
+  <path d="M10 352q140-38 270-12t270-6v62a36 36 0 0 1-36 36H46a36 36 0 0 1-36-36z" fill="#6cc08a"/>
+  <path d="M10 372q160-24 290-4t250-2v28a36 36 0 0 1-36 36H46a36 36 0 0 1-36-36z" fill="#58ad76"/>
+  <g stroke="#1d1a1a" stroke-width="4" stroke-linejoin="round">
+   <rect x="96" y="176" width="236" height="170" rx="6" fill="#fff4e6"/>
+   <path d="M76 186 214 92l138 94z" fill="#2463d6"/>
+   <rect x="270" y="110" width="30" height="50" fill="#ffd7b8"/>
+   <rect x="120" y="212" width="66" height="56" rx="6" fill="#ffe27a"/><path d="M153 212v56M120 240h66"/>
+   <rect x="224" y="246" width="66" height="100" rx="8" fill="#f05a1f"/><circle cx="276" cy="298" r="4" fill="#1d1a1a"/>
+   <rect x="232" y="196" width="50" height="34" rx="6" fill="#ffe27a"/>
+  </g>
+  <circle cx="153" cy="240" r="60" fill="url(#glow)" opacity=".7"/>
+  <g class="beam"><path d="M396 292 520 230v110z" fill="#fff6c8" opacity=".75"/></g>
+  <g stroke="#1d1a1a" stroke-width="4" stroke-linejoin="round">
+   <rect x="340" y="320" width="150" height="74" rx="8" fill="#c98a4b"/><path d="M340 344h150" /><rect x="398" y="330" width="34" height="12" rx="3" fill="#fff4e6"/>
+   <rect x="348" y="262" width="22" height="58" rx="6" fill="#bfe3ff"/><rect x="352" y="252" width="14" height="12" rx="3" fill="#2463d6"/>
+   <rect x="374" y="270" width="22" height="50" rx="6" fill="#bfe3ff"/><rect x="378" y="260" width="14" height="12" rx="3" fill="#2463d6"/>
+   <rect x="396" y="282" width="40" height="20" rx="6" fill="#ffe27a" transform="rotate(-24 396 292)"/>
+   <rect x="440" y="276" width="46" height="44" rx="8" fill="#2c2c2c"/><circle cx="455" cy="298" r="9" fill="#ffe27a"/><path d="M470 290h10M470 300h10M478 276l10-20"/>
+   <rect x="300" y="352" width="34" height="42" rx="6" fill="#fff"/><path d="M317 362v22M306 373h22" stroke="#f05a1f" stroke-width="5"/>
+  </g>
+  <g stroke="#1d1a1a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M160 392v-46M184 392v-46" /><rect x="150" y="296" width="44" height="58" rx="18" fill="#2463d6"/><circle cx="172" cy="274" r="22" fill="#ffd2a8"/><path d="M164 280q8 7 16 0" fill="none"/><circle cx="165" cy="270" r="2" fill="#1d1a1a"/><circle cx="179" cy="270" r="2" fill="#1d1a1a"/><path d="M150 262q22-26 44 0" fill="#3b2a20"/>
+   <path d="M118 392v-28M132 392v-28"/><rect x="110" y="330" width="30" height="40" rx="12" fill="#ffe27a"/><circle cx="125" cy="314" r="16" fill="#ffd2a8"/><path d="M119 319q6 5 12 0" fill="none"/><circle cx="120" cy="311" r="1.6" fill="#1d1a1a"/><circle cx="130" cy="311" r="1.6" fill="#1d1a1a"/><path d="M109 306q16-18 32 0" fill="#7a3f22"/><path d="M140 342l12-10"/>
+  </g>
+  </svg></div>
+</div></section>
+
+<section class="band planner" id="plan"><div class="wrap">
+  <h2><span class="en">Your household checklist</span><span class="zh">你家的備災清單</span></h2>
+  <p class="lede"><span class="en">Change the settings and the list updates instantly. Tick items as you go — your progress is saved on this device only.</span><span class="zh">調整設定，清單即時更新。買好就剔——進度只會儲存在你這部裝置。</span></p>
+  <div class="pgrid">
+    <aside class="card panel">
+      <section><h3><span class="en">Who lives here?</span><span class="zh">家中有誰？</span></h3><div id="people"></div></section>
+      <section><h3><span class="en">How long?</span><span class="zh">準備多久？</span></h3><div class="chips" id="days"></div>
+        <p class="note"><span class="en">The government asks for 3 days. A week gives extra peace of mind.</span><span class="zh">政府建議最少 3 日；準備一星期會更安心。</span></p></section>
+      <section><h3><span class="en">What should we plan for?</span><span class="zh">要防備甚麼？</span></h3><div class="chips" id="threats"></div></section>
+      <section><h3><span class="en">Anything extra?</span><span class="zh">特別需要？</span></h3><div class="chips" id="special"></div></section>
+    </aside>
+    <div class="card" id="out">
+      <div class="listhead">
+        <div class="ring" id="ring"><b id="pct">0%</b></div>
+        <div><h3 id="sum"></h3><div class="note" id="sub"></div></div>
+        <div class="acts">
+          <button class="act" id="bPrint"><span class="en">Print</span><span class="zh">列印</span></button>
+          <button class="act" id="bCopy"><span class="en">Copy list</span><span class="zh">複製清單</span></button>
+          <button class="act" id="bCal"><span class="en">6-month reminder</span><span class="zh">半年提醒</span></button>
+          <button class="act" id="bReset"><span class="en">Clear ticks</span><span class="zh">清除剔選</span></button>
+        </div>
+      </div>
+      <div id="list"></div>
+      <details class="shop"><summary><span class="en">Shopping list — what’s still missing</span><span class="zh">購物清單——仲未準備好的</span> (<span id="shopN">0</span>)</summary><ul id="shop"></ul></details>
+      <details class="shop" open><summary><span class="en">Emergency contact card</span><span class="zh">緊急聯絡卡</span></summary>
+        <p class="note"><span class="en">Write these on paper too — your phone may be flat or the network down.</span><span class="zh">記得同時寫在紙上——手機可能冇電或網絡中斷。</span></p>
+        <div class="contact" id="contact"></div></details>
+    </div>
+  </div>
+</div></section>
+
+<section class="band steps-band" id="steps"><div class="wrap">
+  <h2><span class="en">Three simple steps</span><span class="zh">三個簡單步驟</span></h2>
+  <p class="lede"><span class="en">If households who can prepare do, emergency services can focus on the people who need help most.</span><span class="zh">有能力的家庭先做好準備，救援人員便可優先照顧最需要幫助的人。</span></p>
+  <div class="steps">
+    <div class="card step"><div class="n">1</div><h3><span class="en">Get your supplies</span><span class="zh">準備物資</span></h3><ul>
+      <li><span class="en">Water, food you normally eat, torch, radio, power bank</span><span class="zh">食水、平日會吃的乾糧、電筒、收音機、充電寶</span></li>
+      <li><span class="en">Add a few items each shop to spread the cost</span><span class="zh">每次買餸加一兩件，分散開支</span></li>
+      <li><span class="en">Check dates and refresh every 6 months</span><span class="zh">每半年檢查有效日期並更換</span></li></ul></div>
+    <div class="card step"><div class="n">2</div><h3><span class="en">Make a plan</span><span class="zh">訂立計劃</span></h3><ul>
+      <li><span class="en">Agree a meeting point and an out-of-area contact</span><span class="zh">約定集合地點及外地聯絡人</span></li>
+      <li><span class="en">Swap numbers with neighbours; ask who may need help</span><span class="zh">同鄰居交換電話，了解誰需要幫忙</span></li>
+      <li><span class="en">Check if you can join the free Priority Services Register</span><span class="zh">看看能否登記免費的「優先服務名冊」(PSR)</span></li></ul></div>
+    <div class="card step"><div class="n">3</div><h3><span class="en">Stay informed</span><span class="zh">掌握資訊</span></h3><ul>
+      <li><span class="en">Keep Emergency Alerts switched on on your phone</span><span class="zh">手機保持開啟「緊急警報」</span></li>
+      <li><span class="en">Sign up for Met Office and flood warnings</span><span class="zh">訂閱氣象局及水浸警告</span></li>
+      <li><span class="en">Keep a battery or wind-up radio for local news</span><span class="zh">備用電池或手搖收音機收聽本地新聞</span></li></ul></div>
+  </div>
+</div></section>
+
+<section class="band digital" id="digital"><div class="wrap">
+  <h2><span class="en">Be digitally ready</span><span class="zh">數碼備災</span></h2>
+  <p class="lede"><span class="en">Be Ready names cyber attacks alongside storms. When the internet, card payments or online services stop, these habits keep you going.</span><span class="zh">「Be Ready」把網絡攻擊與風暴並列。當網絡、拍卡或網上服務停頓，以下習慣能讓你照常應付。</span></p>
+  <div class="dgrid">
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg><h3><span class="en">Cash, not just cards</span><span class="zh">現金，不只靠卡</span></h3><p><span class="en">Card machines and banking apps need power and internet. Keep small notes and coins.</span><span class="zh">拍卡機和銀行 App 都要電和網絡，家中留些散紙和硬幣。</span></p></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l3 3v15H6z"/><path d="M9 11h6M9 15h6"/></svg><h3><span class="en">Paper copies</span><span class="zh">紙本副本</span></h3><p><span class="en">Print key phone numbers, medication names and doses, and ID copies. Keep them in a waterproof bag.</span><span class="zh">打印重要電話、藥物名稱劑量及身份證明副本，放入防水袋。</span></p></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 8h4l-2 4h3l-4 5 1-4h-3z"/></svg><h3><span class="en">Charged and offline</span><span class="zh">充好電・可離線</span></h3><p><span class="en">Keep a full power bank, download offline maps of your area, and save 2-step backup codes on paper.</span><span class="zh">充滿充電寶、下載本區離線地圖、把雙重認證備用碼抄在紙上。</span></p></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><h3><span class="en">Spot the scams</span><span class="zh">提防騙案</span></h3><p><span class="en">Crises bring fake “refund” texts and calls. Official bodies won’t ask for your bank details by message.</span><span class="zh">危機時常有假「退款」短訊和來電。官方機構不會用短訊索取銀行資料。</span></p></div>
+  </div>
+</div></section>
+
+<section class="band numbers" id="numbers"><div class="wrap">
+  <h2><span class="en">Numbers to write down</span><span class="zh">請抄低這些電話</span></h2>
+  <div class="nums">
+    <div class="card num"><b>999</b><p><span class="en">Life in danger — police, fire, ambulance, coastguard</span><span class="zh">有生命危險——警察、消防、救護、海岸警衛</span></p></div>
+    <div class="card num"><b>105</b><p><span class="en">Power cut — reach your local electricity network</span><span class="zh">停電——聯絡本區電網公司</span></p></div>
+    <div class="card num"><b>111</b><p><span class="en">Urgent medical help that isn’t an emergency (NHS)</span><span class="zh">非緊急但需要的醫療協助 (NHS)</span></p></div>
+    <div class="card num"><b>0345 988 1188</b><p><span class="en">Floodline — flood warnings, England</span><span class="zh">Floodline 水浸熱線（英格蘭）</span></p></div>
+  </div>
+  <div class="links">
+    <a href="https://beready.campaign.gov.uk/" rel="noopener">Be Ready (GOV.UK)<small><span class="en">Official checklist and hazard advice</span><span class="zh">官方清單及風險資訊</span></small></a>
+    <a href="https://www.thepsr.co.uk/" rel="noopener">Priority Services Register<small><span class="en">Free extra help during outages</span><span class="zh">停電停水時的免費額外支援</span></small></a>
+    <a href="https://www.metoffice.gov.uk/weather/warnings-and-advice" rel="noopener">Met Office warnings<small><span class="en">Severe weather alerts</span><span class="zh">惡劣天氣警告</span></small></a>
+    <a href="https://www.gov.uk/sign-up-for-flood-warnings" rel="noopener">Flood warnings sign-up<small><span class="en">Free alerts by phone, text or email</span><span class="zh">免費電話／短訊／電郵警告</span></small></a>
+    <a href="https://www.readyscotland.org/" rel="noopener">Ready Scotland<small><span class="en">Advice for Scotland</span><span class="zh">蘇格蘭適用資訊</span></small></a>
+    <a href="https://www.nidirect.gov.uk/" rel="noopener">nidirect<small><span class="en">Advice for Northern Ireland</span><span class="zh">北愛爾蘭適用資訊</span></small></a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <span><span class="en">Free for everyone. Nothing you enter leaves your device. This site is independent and not run by the UK Government.</span><span class="zh">免費使用，你輸入的資料不會離開你的裝置。本站為獨立網站，並非英國政府營運。</span></span>
+  <span>© <a href="https://billionstudio.co.uk" rel="noopener">Billion Studio</a> 2026 · PrepReady v3.0</span>
+</div></footer>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
-let lang = 'en';
-let theme = 'dark';
-let curStep = 1;
-let shopOpen = false;
+{
+const KEY='prepready.v3';
+let S={lang:null,a:2,c:0,i:0,e:0,p:0,d:3,t:['power','flood','cyber','water'],s:[],done:{},ct:{}};
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+if(!S.lang)S.lang=/^zh/i.test(navigator.language||'')?'zh':'en';
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const L=(en,zh)=>S.lang==='zh'?zh:en;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-let ST = {
-  members: 2,
-  ages: { infant:0, child:0, adult:2, elder:0 },
-  threats: [],
-  needs: [],
-  duration: 7
-};
+const PEOPLE=[['a','Adults','成人','18–64','18–64 歲'],['e','Older adults','長者','65+','65 歲以上'],['c','Children','兒童','3–17','3–17 歲'],['i','Babies & toddlers','嬰幼兒','0–2','0–2 歲'],['p','Pets','寵物','','']];
+const DAYS=[[3,'3 days','3 日'],[7,'1 week','1 星期'],[14,'2 weeks','2 星期']];
+const THREATS=[['power','Power cut','停電'],['flood','Flood & storm','水浸及風暴'],['cyber','Cyber attack / internet down','網絡攻擊／斷網'],['water','Water supply cut','停水'],['ill','Illness at home','家中有人患病']];
+const SPECIAL=[['meds','Regular medication','長期服藥'],['mob','Mobility needs','行動不便'],['diet','Special diet','特別飲食']];
+const CATS={water:['Water','食水','#2463d6'],food:['Food','食物','#f0a21f'],light:['Light & warmth','照明及保暖','#f05a1f'],comms:['Power & radio','電源及收音機','#7b5cd6'],docs:['Cash & documents','現金及文件','#18864f'],health:['Health & hygiene','健康及衛生','#d6336c'],family:['Babies, children & pets','嬰幼兒、兒童及寵物','#0e9aa7'],plan:['Plan & stay informed','計劃及資訊','#545d66']};
 
-// Item states: 0=not ready, 1=need to buy, 2=have it
-let itemStates = {};   // key -> 0|1|2
-let itemExpiry = {};   // key -> date string
-let customItems = {};  // catIdx -> [{name,key}]
+// [cat,id,en,zh,noteEn,noteZh,qty(x)->[n,en,zh]|null,when(x)->bool]
+const ITEMS=[
+['water','w1','Bottled drinking water','樽裝飲用水','3 litres per person per day, plus a little extra for cooking and washing','每人每日 3 公升，另加少量煮食及清潔用',x=>[3*x.n*x.d,'L','公升']],
+['water','w2','Water purification tablets','淨水藥片','Backup if bottled water runs low','樽裝水不夠時的後備',null,x=>x.t.has('water')||x.t.has('flood')],
+['water','w3','Big containers to fill when warned','大水桶（收到警告時儲水）','Fill them and the bath before a planned cut','預告停水前先裝滿水桶及浴缸',null,x=>x.t.has('water')],
+['food','f1','Non-perishable, no-cook food','免煮、耐存的食物','Tins, dried fruit, nuts, crackers — food your family normally eats','罐頭、乾果、果仁、餅乾——揀家人平日會吃的',x=>[3*x.n*x.d,'meals','餐']],
+['food','f2','Manual tin opener','手動開罐器','',''],
+['food','f3','Food that fits special diets','符合特別飲食需要的食物','Allergy-safe, halal, vegetarian etc. — label it','如防敏感、清真、素食——貼上標籤',null,x=>x.s.has('diet')],
+['light','l1','Torch','電筒','One for each room you’d use','每個常用房間一支',x=>[Math.max(1,Math.ceil(x.n/2)),'',' 支']],
+['light','l2','Spare batteries','後備電池','Check sizes match your torch and radio','確認尺寸配合電筒及收音機',null],
+['light','l3','Battery lantern','電池營燈','Safer than candles, especially with children','比蠟燭安全，家有小朋友尤其重要',null,x=>x.t.has('power')],
+['light','l4','Blankets or sleeping bags','毛毯或睡袋','',' ',x=>[x.n,'','張']],
+['light','l5','Warm clothes and hats','保暖衣物及帽','Layers keep heat in when heating is off','暖氣停了，多層衣物最保暖',null],
+['comms','c1','Wind-up or battery radio','手搖或電池收音機','For local news if phones and internet fail','電話網絡失效時收聽本地新聞',null],
+['comms','c2','Fully charged power bank','已充滿電的充電寶','Recharge it every few months',' 每幾個月補充一次電',x=>[Math.max(1,Math.ceil((x.a+x.e+x.c)/2)),'',' 個']],
+['comms','c3','Charging cables','充電線','',''],
+['comms','c4','Offline maps and saved info on phone','手機下載離線地圖及資料','',''],
+['docs','d1','Cash, including coins','現金（包括硬幣）','Shops may only take cash if card systems are down','拍卡系統失靈時商店可能只收現金',null],
+['docs','d2','Copies of ID and key documents','身份證明及重要文件副本','In a waterproof bag','放入防水袋',null],
+['docs','d3','Important phone numbers on paper','紙本重要電話','',''],
+['docs','d4','2-step verification backup codes on paper','雙重認證備用碼（紙本）','So you can still log in from another device','以便用其他裝置登入',null,x=>x.t.has('cyber')],
+['health','h1','First aid kit','急救箱','',''],
+['health','h2','Essential medicines','必需藥物','Ask your pharmacy about ordering repeat prescriptions early','向藥房查詢提早續藥',x=>[x.d,'days’ supply','日份量'],x=>x.s.has('meds')],
+['health','h3','List of medicines and doses','藥物名稱及劑量清單','On paper, for each person who takes them','每位服藥者各一份紙本',null,x=>x.s.has('meds')||x.e>0],
+['health','h4','Hand sanitiser and wet wipes','搓手液及濕紙巾','',''],
+['health','h5','Toilet roll, bin bags, period products','廁紙、垃圾袋、衞生用品','',''],
+['health','h6','Thermometer, paracetamol, face masks','體溫計、撲熱息痛、口罩','',' ',null,x=>x.t.has('ill')],
+['health','h7','Spare batteries / charger for mobility aids','行動輔助器材的後備電池或充電器','',' ',null,x=>x.s.has('mob')],
+['family','k1','Ready-to-feed baby formula','即飲嬰兒奶','No need for boiled water','毋須煲水沖調',null,x=>x.i>0],
+['family','k2','Nappies and baby wipes','尿片及嬰兒濕紙巾','About 8 nappies per baby per day','每名嬰兒每日約 8 片',x=>[8*x.i*x.d,'','片'],x=>x.i>0],
+['family','k3','Games, books, a comfort toy','遊戲、圖書、安撫玩具','Helps children feel safe without screens','冇電視電腦時讓小朋友安心',null,x=>x.c+x.i>0],
+['family','k4','Pet food','寵物糧','Plus bottled water for pets',' 另備寵物飲用水',x=>[x.d,'days','日'],x=>x.p>0],
+['family','k5','Pet lead, carrier and medicines','寵物繩、籠及藥物','',' ',null,x=>x.p>0],
+['plan','p1','Agree a meeting point and out-of-area contact','約定集合點及外地聯絡人','',''],
+['plan','p2','Swap contact details with neighbours','與鄰居交換聯絡方法','Ask if anyone may need extra help','問問有沒有人需要額外幫助',null],
+['plan','p3','Check Priority Services Register','查詢「優先服務名冊」(PSR)','Free extra support from energy and water companies','能源及水務公司提供的免費支援',null,x=>x.e>0||x.i>0||x.s.has('mob')||x.s.has('meds')],
+['plan','p4','Know how to switch off gas, electricity and water','學會關掉煤氣、電和水總掣','',' ',null,x=>x.t.has('flood')],
+['plan','p5','Sign up for flood and weather warnings','訂閱水浸及天氣警告','',' ',null,x=>x.t.has('flood')],
+['plan','p6','Keep Emergency Alerts on your phone','手機開啟「緊急警報」','',''],
+['plan','p7','Set a reminder to check your kit every 6 months','設定每半年檢查物資提醒','Use the reminder button above','用上方「半年提醒」按鈕',null]
+];
 
-// ═══════════════════════════════════════════════════════
-// i18n
-// ═══════════════════════════════════════════════════════
-const T = {
-en:{
-  eyebrow:'Free · Personal · Always Ready',
-  h1:'Be ready<br>before the<br><em>unexpected.</em>',
-  heroP:'Answer 4 quick questions. Get a personalised emergency checklist tailored to your household — for natural disasters, conflict, or infrastructure failure.',
-  s1lbl:'Step 1 of 4',s2lbl:'Step 2 of 4',s3lbl:'Step 3 of 4',s4lbl:'Step 4 of 4',
-  s1title:'How many people in your household?',
-  s2title:'What threats concern you most?',
-  s3title:'Any special considerations?',
-  s4title:'How long do you want to prepare for?',
-  whoTitle:"Who's in your household?",
-  people:'people',
-  infant:'Infant (0–2)',child:'Child (3–12)',adult:'Adult (13–64)',elder:'Elder (65+)',
-  tNat:'Natural Disaster',tNatD:'Earthquake, flood, typhoon, wildfire',
-  tCon:'Armed Conflict',tConD:'War, civil unrest, evacuation orders',
-  tInf:'Infrastructure Failure',tInfD:'Power grid, water supply, internet outage',
-  tPan:'Pandemic / Quarantine',tPanD:'Disease outbreak, lockdown, isolation',
-  nChr:'Chronic medication',nMob:'Mobility limitations',nPet:'Pets',
-  nDiet:'Dietary restrictions',nBaby:'Baby supplies',nNone:'None of the above',
-  d3:'72 hours (minimum)',d7:'1 week (recommended)',d30:'1 month (advanced)',
-  durNote:'Most governments recommend a minimum of 72 hours. In conflict or infrastructure scenarios, 1–2 weeks is more realistic.',
-  next:'Next',back:'← Back',generate:'Generate My List',
-  resLbl:'Your personalised checklist',resTitle:'Emergency Prep List',
-  progTitle:'Preparation Progress',
-  print:'🖨 Print',share:'📤 Share',export:'💾 Export',import:'📂 Import',remind:'📅 Reminder',restart:'↺ Restart',
-  shopTitle:'Shopping List',
-  ecTitle:'Emergency Contact Card',
-  ec1:'Local emergency:',ec2:'Meeting point:',ec3:'Out-of-area contact:',ec4:'Evacuation route:',
-  footLeft:'PrepReady is free for everyone. No data leaves your device.',
-  checkedOf:'checked of',items:'items',
-  expiryLbl:'Expires:',
-  addItem:'+ Add item',addPlaceholder:'Add custom item...',
-  stateLabels:['○','🛒','✓'],
-  shopEmpty:'No items marked "need to buy" yet.',
-  collapseAll:'Collapse all',expandAll:'Expand all',
-  toastSaved:'✓ Progress saved',toastCopied:'✓ Copied!',toastShared:'✓ Shared!',toastImported:'✓ Imported!',
-  modalExportTitle:'Backup Code',modalExportDesc:'Copy this code. Use Import to restore on any device.',
-  modalImportTitle:'Restore Backup',modalImportDesc:'Paste your backup code below.',
-  modalCopy:'Copy',modalImport:'Restore',
-  icsTitle:'PrepReady — 6-month check',
-  icsNote:'Check your emergency supplies: water, food, medications, batteries.',
-  reminderSet:'✓ Calendar file downloaded!'
-},
-zh:{
-  eyebrow:'免費 · 個人化 · 隨時準備',
-  h1:'在突發事件發生前，<br><em>做好準備。</em>',
-  heroP:'回答4個問題，即可獲得針對您家庭的個人化緊急備災清單——適用於自然災害、武裝衝突或基礎設施故障。',
-  s1lbl:'第1步 / 共4步',s2lbl:'第2步 / 共4步',s3lbl:'第3步 / 共4步',s4lbl:'第4步 / 共4步',
-  s1title:'您家中有多少人？',
-  s2title:'您最擔心哪些威脅？',
-  s3title:'有任何特殊需求嗎？',
-  s4title:'您想準備多長時間的物資？',
-  whoTitle:'家庭成員組成',
-  people:'人',
-  infant:'嬰幼兒 (0–2歲)',child:'兒童 (3–12歲)',adult:'成人 (13–64歲)',elder:'長者 (65歲+)',
-  tNat:'自然災害',tNatD:'地震、洪水、颱風、山火',
-  tCon:'武裝衝突',tConD:'戰爭、社會動亂、疏散令',
-  tInf:'基礎設施故障',tInfD:'電網、供水、網絡中斷',
-  tPan:'疫症 / 隔離',tPanD:'疾病爆發、封鎖、隔離',
-  nChr:'長期病患藥物',nMob:'行動不便人士',nPet:'寵物',
-  nDiet:'特殊飲食需求',nBaby:'嬰兒用品',nNone:'以上皆無',
-  d3:'72小時（最低標準）',d7:'1週（建議）',d30:'1個月（進階）',
-  durNote:'大多數政府建議至少準備72小時物資。衝突或基礎設施故障情境下，1至2週更為實際。',
-  next:'下一步',back:'← 返回',generate:'生成我的清單',
-  resLbl:'您的個人化清單',resTitle:'緊急備災清單',
-  progTitle:'準備進度',
-  print:'🖨 列印',share:'📤 分享',export:'💾 匯出',import:'📂 匯入',remind:'📅 提醒',restart:'↺ 重新開始',
-  shopTitle:'購物清單',
-  ecTitle:'緊急聯絡卡',
-  ec1:'當地緊急電話：',ec2:'集合地點：',ec3:'外地聯絡人：',ec4:'疏散路線：',
-  footLeft:'PrepReady 免費供所有人使用。資料不會離開您的裝置。',
-  checkedOf:'已確認，共',items:'項',
-  expiryLbl:'到期日：',
-  addItem:'+ 新增物品',addPlaceholder:'新增自訂物品…',
-  stateLabels:['○','🛒','✓'],
-  shopEmpty:'尚未標記任何「需購買」的物品。',
-  collapseAll:'全部收合',expandAll:'全部展開',
-  toastSaved:'✓ 已儲存',toastCopied:'✓ 已複製！',toastShared:'✓ 已分享！',toastImported:'✓ 已匯入！',
-  modalExportTitle:'備份碼',modalExportDesc:'複製此代碼，在任何裝置使用「匯入」功能還原。',
-  modalImportTitle:'還原備份',modalImportDesc:'貼上您的備份碼。',
-  modalCopy:'複製',modalImport:'還原',
-  icsTitle:'PrepReady — 半年度檢查',
-  icsNote:'請檢查您的緊急物資：飲用水、食物、藥物、電池。',
-  reminderSet:'✓ 日曆提醒已下載！'
-}};
+function ctx(){return{a:S.a,c:S.c,i:S.i,e:S.e,p:S.p,n:Math.max(1,S.a+S.c+S.i+S.e),d:S.d,t:new Set(S.t),s:new Set(S.s)}}
+function active(){const x=ctx();return ITEMS.filter(it=>!it[7]||it[7](x)).map(it=>{const q=it[6]?it[6](x):null;return{cat:it[0],id:it[1],name:L(it[2],it[3]),note:L(it[4],it[5]).trim(),q:q?(S.lang==='zh'?q[0]+q[2]:q[0]+(q[1]?' '+q[1]:'')):''}})}
 
-function t(k){ return T[lang][k] || T.en[k] || k; }
-
-// ═══════════════════════════════════════════════════════
-// CHECKLIST DATA
-// ═══════════════════════════════════════════════════════
-function getCategories(){
-  const zh = lang==='zh';
-  const m = ST.members, d = ST.duration;
-
-  const cats = [];
-
-  // WATER
-  cats.push({ icon:'💧', nameEn:'Water', nameZh:'飲用水', items:[
-    { nameEn:`Drinking water (${m*d*3} litres total)`, nameZh:`飲用水（${m*d*3}升）`, noteEn:`3L per person per day`, noteZh:`每人每天3升`, pri:true,
-      infoEn:'Purification tip: Add 8 drops of unscented household bleach per gallon of water. Stir and let stand 30 min before drinking.',
-      infoZh:'淨水提示：每加侖水加入8滴無香漂白水，攪拌後靜置30分鐘再飲用。' },
-    { nameEn:'Water purification tablets', nameZh:'淨水錠', noteEn:'Backup when tap water is unsafe', noteZh:'自來水不安全時備用',
-      infoEn:'Most tablets treat 1L per tablet. Follow package instructions. Iodine-based tablets are not suitable for pregnant women.',
-      infoZh:'大多數淨水錠每粒處理1升水。孕婦不宜使用碘基淨水錠。' },
-    { nameEn:'Collapsible water containers', nameZh:'折疊儲水桶', noteEn:'For collecting rainwater or tap water', noteZh:'收集雨水或儲備自來水' },
-  ]});
-
-  // FOOD
-  const fItems = [
-    { nameEn:`Non-perishable food (${d} days)`, nameZh:`不需烹煮的即食食品（${d}天）`, noteEn:'Canned goods, dry goods, energy bars', noteZh:'罐頭、乾糧、能量棒', pri:true },
-    { nameEn:'Manual can opener', nameZh:'手動開罐器', noteEn:'', noteZh:'', pri:true },
-    { nameEn:'Portable stove & fuel', nameZh:'便攜式爐具及燃料', noteEn:'', noteZh:'' },
-    { nameEn:'Eating utensils & storage bags', nameZh:'餐具及食品儲存袋', noteEn:'', noteZh:'' },
-  ];
-  if(ST.needs.includes('diet')) fItems.push({ nameEn:'Dietary-specific foods', nameZh:'符合飲食需求的特定食品', noteEn:'Vegan, gluten-free, halal, etc.', noteZh:'素食、無麩質、清真等', pri:true });
-  if(ST.ages.infant>0||ST.needs.includes('baby')) fItems.push({ nameEn:`Baby formula & food (${d} days)`, nameZh:`嬰兒奶粉及副食品（${d}天）`, noteEn:'', noteZh:'', pri:true });
-  cats.push({ icon:'🥫', nameEn:'Food', nameZh:'食物', items:fItems });
-
-  // FIRST AID
-  const mItems = [
-    { nameEn:'First aid kit (fully stocked)', nameZh:'急救箱（完整配備）', noteEn:'', noteZh:'', pri:true,
-      infoEn:'Check kit contents include: bandages, antiseptic wipes, adhesive tape, scissors, tweezers, and disposable gloves.',
-      infoZh:'確認急救箱內含：繃帶、消毒濕巾、醫用膠布、剪刀、鑷子及即棄手套。' },
-    { nameEn:'Face masks (N95 or surgical)', nameZh:'口罩（N95或外科口罩）', noteEn:'', noteZh:'' },
-    { nameEn:'Antiseptic & disposable gloves', nameZh:'消毒酒精及手套', noteEn:'', noteZh:'' },
-    { nameEn:'Thermometer', nameZh:'體溫計', noteEn:'', noteZh:'' },
-    { nameEn:'Pain relief & fever medication', nameZh:'止痛藥及退燒藥', noteEn:'', noteZh:'' },
-  ];
-  if(ST.needs.includes('chronic')) mItems.push({ nameEn:`Prescription medications (${d}+ day supply)`, nameZh:`長期藥物（${d}天以上份量）`, noteEn:'Ask your doctor for extra supply', noteZh:'請提前向醫生要求多配藥', pri:true });
-  if(ST.ages.elder>0) mItems.push({ nameEn:'Elder-specific medications & aids', nameZh:'長者專用藥物及醫療用品', noteEn:'', noteZh:'', pri:true });
-  cats.push({ icon:'🩺', nameEn:'First Aid & Medical', nameZh:'醫療急救', items:mItems });
-
-  // POWER
-  const pItems = [
-    { nameEn:`Flashlights (×${m})`, nameZh:`手電筒（×${m}）`, noteEn:'One per person', noteZh:'每人一個', pri:true },
-    { nameEn:'Extra batteries (large supply)', nameZh:'備用電池（大量）', noteEn:'', noteZh:'' },
-    { nameEn:'Power bank (high capacity)', nameZh:'行動電源（大容量）', noteEn:'', noteZh:'' },
-    { nameEn:'Candles & lighters', nameZh:'蠟燭及打火機', noteEn:'', noteZh:'' },
-  ];
-  if(ST.threats.includes('infra')) pItems.push({ nameEn:'Solar charging panel', nameZh:'太陽能充電板', noteEn:'Critical for extended outages', noteZh:'長期停電時尤為重要' });
-  cats.push({ icon:'🔦', nameEn:'Power & Lighting', nameZh:'電力及照明', items:pItems });
-
-  // DOCUMENTS
-  const dItems = [
-    { nameEn:'ID copies in waterproof bag', nameZh:'身份證件副本（防水袋）', noteEn:'Passport, ID, birth certificates', noteZh:'護照、身份證、出生證明', pri:true },
-    { nameEn:'Bank & insurance details', nameZh:'銀行及保險資料副本', noteEn:'', noteZh:'' },
-    { nameEn:'Emergency contacts (printed)', nameZh:'緊急聯絡人名單（紙本）', noteEn:'', noteZh:'', pri:true },
-    { nameEn:'Cash in small denominations', nameZh:'少量現金（小額紙幣）', noteEn:'Electronic payments may fail', noteZh:'電子支付可能無法使用' },
-  ];
-  if(ST.threats.includes('conflict')) dItems.push({ nameEn:'Evacuation plan & paper maps', nameZh:'疏散計劃及紙本地圖', noteEn:'Know two routes out', noteZh:'熟悉兩條疏散路線', pri:true });
-  cats.push({ icon:'📄', nameEn:'Documents & Finance', nameZh:'文件及財務', items:dItems });
-
-  // COMMS
-  cats.push({ icon:'📻', nameEn:'Communications', nameZh:'通訊', items:[
-    { nameEn:'Battery-powered radio', nameZh:'電池式收音機', noteEn:'Critical for emergency broadcasts', noteZh:'緊急廣播的唯一途徑', pri:true },
-    { nameEn:'Phone chargers (multiple types)', nameZh:'充電器（各種插頭）', noteEn:'', noteZh:'' },
-    ...(ST.threats.includes('conflict')?[{ nameEn:'Whistle (one per person)', nameZh:'哨子（每人一個）', noteEn:'For signalling', noteZh:'信號用途' }]:[]),
-  ]});
-
-  // SHELTER
-  cats.push({ icon:'🏕️', nameEn:'Shelter & Warmth', nameZh:'避難及保暖', items:[
-    { nameEn:`Emergency blankets (×${m})`, nameZh:`急救毯（×${m}）`, noteEn:'Or sleeping bags', noteZh:'或睡袋', pri:true },
-    { nameEn:'Rain poncho (per person)', nameZh:'雨衣（每人一件）', noteEn:'', noteZh:'' },
-    { nameEn:'Change of clothes (several sets)', nameZh:'換洗衣物（數套）', noteEn:'', noteZh:'' },
-    { nameEn:'Sturdy walking shoes', nameZh:'堅固步行鞋', noteEn:'', noteZh:'' },
-  ]});
-
-  // SANITATION
-  const sItems = [
-    { nameEn:'Toilet paper & wet wipes', nameZh:'衛生紙及濕紙巾', noteEn:'', noteZh:'' },
-    { nameEn:'Hand sanitiser', nameZh:'洗手液', noteEn:'', noteZh:'' },
-    { nameEn:'Large rubbish bags', nameZh:'垃圾袋（大型）', noteEn:'', noteZh:'' },
-    { nameEn:'Portable toilet alternative', nameZh:'便攜式廁所方案', noteEn:'', noteZh:'' },
-  ];
-  if(ST.ages.infant>0||ST.needs.includes('baby')) sItems.push({ nameEn:`Nappies (${d*6} pieces)`, nameZh:`紙尿片（${d*6}片）`, noteEn:'', noteZh:'', pri:true });
-  cats.push({ icon:'🚿', nameEn:'Sanitation & Hygiene', nameZh:'衛生用品', items:sItems });
-
-  // SPECIAL
-  if(ST.needs.includes('mobility')){
-    cats.push({ icon:'♿', nameEn:'Mobility Aids', nameZh:'行動輔助', items:[
-      { nameEn:'Spare mobility aids', nameZh:'備用輔助器材（輪椅、助行器）', noteEn:'', noteZh:'', pri:true },
-      { nameEn:'Pre-planned accessible evacuation route', nameZh:'預先規劃無障礙疏散路線', noteEn:'', noteZh:'', pri:true },
-      { nameEn:'Register needs with emergency services', nameZh:'向緊急服務登記特殊需求', noteEn:'', noteZh:'' },
-    ]});
-  }
-
-  if(ST.needs.includes('pet')){
-    cats.push({ icon:'🐾', nameEn:'Pet Supplies', nameZh:'寵物用品', items:[
-      { nameEn:`Pet food (${d} day supply)`, nameZh:`寵物糧食（${d}天）`, noteEn:'', noteZh:'', pri:true },
-      { nameEn:'Pet water bowl & containers', nameZh:'寵物飲水及碗具', noteEn:'', noteZh:'' },
-      { nameEn:'Pet carrier & leash', nameZh:'寵物籠及牽引繩', noteEn:'', noteZh:'' },
-      { nameEn:'Pet medical records & vaccination proof', nameZh:'寵物醫療記錄及疫苗證明', noteEn:'', noteZh:'' },
-    ]});
-  }
-
-  if(ST.threats.includes('conflict')){
-    cats.push({ icon:'🏃', nameEn:'Go-Bag (Bug-Out Bag)', nameZh:'快速撤離包', items:[
-      { nameEn:'Pre-packed backpack ready to grab', nameZh:'預先打包的背包（隨時可走）', noteEn:'All essentials, grab in under 2 minutes', noteZh:'所有必需品，2分鐘內拎起就走', pri:true,
-        infoEn:'Packing tip: Heaviest items closest to your back, frequently needed items in outer pockets, all clothes in waterproof bags.',
-        infoZh:'打包提示：最重的物品靠近背部，常用物品放外袋，所有衣物用防水袋裝起來。' },
-      { nameEn:'Original documents', nameZh:'重要文件（原件）', noteEn:'', noteZh:'', pri:true },
-      { nameEn:'Know your nearest shelter', nameZh:'確認最近避難所位置', noteEn:'', noteZh:'', pri:true },
-      { nameEn:'Two pre-agreed family meeting points', nameZh:'預設兩個家庭集合點', noteEn:'', noteZh:'' },
-    ]});
-  }
-
-  return cats;
+function controls(){
+  $('people').innerHTML=PEOPLE.map(([k,en,zh,se,sz])=>`<div class="row"><div>${L(en,zh)}${se?`<small>${L(se,sz)}</small>`:''}</div><div class="stp"><button data-k="${k}" data-v="-1" aria-label="−">−</button><output>${S[k]}</output><button data-k="${k}" data-v="1" aria-label="+">+</button></div></div>`).join('');
+  $('days').innerHTML=DAYS.map(([v,en,zh])=>`<button class="chip" data-d="${v}" aria-pressed="${S.d===v}">${L(en,zh)}</button>`).join('');
+  $('threats').innerHTML=THREATS.map(([k,en,zh])=>`<button class="chip" data-t="${k}" aria-pressed="${S.t.includes(k)}">${L(en,zh)}</button>`).join('');
+  $('special').innerHTML=SPECIAL.map(([k,en,zh])=>`<button class="chip" data-s="${k}" aria-pressed="${S.s.includes(k)}">${L(en,zh)}</button>`).join('');
 }
-
-// ═══════════════════════════════════════════════════════
-// STEP NAVIGATION
-// ═══════════════════════════════════════════════════════
-function goStep(n){
-  document.getElementById('s'+curStep).classList.remove('on');
-  curStep = n;
-  document.getElementById('s'+n).classList.add('on');
-  document.getElementById('heroSection').style.display = n===1?'block':'none';
-  document.getElementById('progTrack').style.display = n===1?'none':'flex';
-  if(n<=4) updateProgBar(n);
-  window.scrollTo({top:0,behavior:'smooth'});
+function contact(){
+  const F=[['local','Local emergency contact','本地緊急聯絡人'],['away','Out-of-area contact','外地聯絡人'],['meet','Meeting point','集合地點'],['neigh','Neighbour','鄰居'],['gp','GP surgery','家庭醫生診所'],['supplier','Electricity supplier','電力供應商']];
+  $('contact').innerHTML=F.map(([k,en,zh])=>`<label>${L(en,zh)}<input data-ct="${k}" value="${esc(S.ct[k]||'')}" autocomplete="off"></label>`).join('');
 }
-
-function updateProgBar(n){
-  for(let i=1;i<=4;i++){
-    const el=document.getElementById('ps'+i);
-    el.className='prog-step'+(i<n?' done':i===n?' cur':'');
-  }
+function render(){
+  const items=active();let done=0;
+  const groups={};items.forEach(it=>{(groups[it.cat]=groups[it.cat]||[]).push(it);if(S.done[it.id])done++});
+  $('list').innerHTML=Object.keys(CATS).filter(c=>groups[c]).map(c=>`<div class="cat" style="--c:${CATS[c][2]}"><h4><i></i>${L(CATS[c][0],CATS[c][1])}</h4>${groups[c].map(it=>`<label class="item${S.done[it.id]?' done':''}"><input type="checkbox" data-id="${it.id}" ${S.done[it.id]?'checked':''}><span class="t"><span>${it.name}</span>${it.note?`<small>${it.note}</small>`:''}</span>${it.q?`<span class="q">${it.q}</span>`:''}</label>`).join('')}</div>`).join('');
+  const pct=items.length?Math.round(done/items.length*100):0;
+  $('ring').style.setProperty('--p',pct);$('pct').textContent=pct+'%';
+  const n=S.a+S.c+S.i+S.e,dl=DAYS.find(d=>d[0]===S.d);
+  $('sum').textContent=L(`${n} ${n===1?'person':'people'}${S.p?` + ${S.p} pet${S.p>1?'s':''}`:''} · ${dl[1]}`,`${n} 人${S.p?` + ${S.p} 隻寵物`:''} · ${dl[2]}`);
+  $('sub').textContent=L(`${done} of ${items.length} ready`,`已準備 ${done} / ${items.length} 項`);
+  const miss=items.filter(it=>!S.done[it.id]&&it.cat!=='plan');
+  $('shopN').textContent=miss.length;
+  $('shop').innerHTML=miss.map(it=>`<li>${it.name}${it.q?` — <b>${it.q}</b>`:''}</li>`).join('')||`<li>${L('All set — well done!','全部準備好，做得好！')}</li>`;
 }
+function setLang(l){S.lang=l;document.documentElement.dataset.lang=l;document.documentElement.lang=l==='zh'?'zh-Hant':'en';document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===l));controls();contact();render();save()}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2200)}
 
-function adjCount(d){ ST.members=Math.max(1,Math.min(20,ST.members+d)); document.getElementById('memberNum').textContent=ST.members; }
-function adjAge(g,d){ ST.ages[g]=Math.max(0,ST.ages[g]+d); document.getElementById('a-'+g).textContent=ST.ages[g]; }
-function togThreat(t){ const el=document.getElementById('t-'+t); const idx=ST.threats.indexOf(t); if(idx>=0){ST.threats.splice(idx,1);el.classList.remove('sel');}else{ST.threats.push(t);el.classList.add('sel');} }
-function togNeed(n){
-  if(n==='none'){ ST.needs=[]; document.querySelectorAll('.need-chip').forEach(c=>c.classList.remove('sel')); document.getElementById('n-none').classList.add('sel'); return; }
-  document.getElementById('n-none').classList.remove('sel');
-  ST.needs=ST.needs.filter(x=>x!=='none');
-  const el=document.getElementById('n-'+n); const idx=ST.needs.indexOf(n);
-  if(idx>=0){ST.needs.splice(idx,1);el.classList.remove('sel');}else{ST.needs.push(n);el.classList.add('sel');}
-}
-function setDur(d){ ST.duration=d; document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('sel')); document.getElementById('d-'+d).classList.add('sel'); }
-
-// ═══════════════════════════════════════════════════════
-// BUILD RESULT
-// ═══════════════════════════════════════════════════════
-function buildResult(){
-  document.getElementById('s4').classList.remove('on');
-  document.getElementById('sResult').classList.add('on');
-  document.getElementById('progTrack').style.display='none';
-  renderResult();
-  restoreEcContacts();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function renderResult(){
-  const cats = getCategories();
-
-  // Meta
-  const thrNames = ST.threats.map(x=>({natural:t('tNat'),conflict:t('tCon'),infra:t('tInf'),pandemic:t('tPan')}[x])).join(', ')||'General';
-  document.getElementById('metaRow').innerHTML=`
-    <div class="meta-tag"><strong>${ST.members}</strong> ${t('people')}</div>
-    <div class="meta-tag"><strong>${ST.duration}</strong> ${lang==='zh'?'天':'days'}</div>
-    <div class="meta-tag">${thrNames}</div>`;
-
-  const out = document.getElementById('checklistOut');
-  out.innerHTML='';
-
-  cats.forEach((cat,ci)=>{
-    const allItems = [...cat.items, ...(customItems[ci]||[]).map(c=>({nameEn:c.name,nameZh:c.name,noteEn:'',noteZh:'',custom:true}))];
-    const block = document.createElement('div');
-    block.className='cat-block';
-    block.id='cat-'+ci;
-
-    const name = lang==='zh'?cat.nameZh:cat.nameEn;
-    block.innerHTML=`
-      <div class="cat-head" onclick="toggleCat(${ci})">
-        <span class="cat-icon">${cat.icon}</span>
-        <span class="cat-name">${name}</span>
-        <span class="cat-badge" id="badge-${ci}">${allItems.length} items</span>
-        <span class="cat-chevron">▾</span>
-      </div>
-      <div class="cat-body" id="body-${ci}">
-        <div id="items-${ci}"></div>
-        <div class="add-custom">
-          <input class="custom-input" id="ci-${ci}" placeholder="${t('addPlaceholder')}" onkeydown="if(event.key==='Enter')addCustom(${ci})">
-          <button class="add-btn" onclick="addCustom(${ci})">${t('addItem')}</button>
-        </div>
-      </div>`;
-    out.appendChild(block);
-    renderItems(ci, cat.items);
-  });
-
-  updateRing();
-}
-
-function renderItems(ci, baseItems){
-  const customs = (customItems[ci]||[]).map(c=>({nameEn:c.name,nameZh:c.name,noteEn:'',noteZh:'',key:c.key}));
-  const all = [...baseItems.map((it,ii)=>({...it,key:`${ci}-${ii}`})), ...customs];
-  const cont = document.getElementById('items-'+ci);
-  cont.innerHTML='';
-
-  all.forEach(it=>{
-    const key = it.key;
-    const st = itemStates[key]||0;
-    const exp = itemExpiry[key]||'';
-    const name = lang==='zh'?it.nameZh:it.nameEn;
-    const note = lang==='zh'?it.noteZh:it.noteEn;
-    const info = lang==='zh'?it.infoZh:it.infoEn;
-    const stateClass = st===1?'need-buy':st===2?'is-have':'';
-    const btnClass = st===1?'need':st===2?'have':'';
-    const btnIcon = ['○','🛒','✓'][st];
-
-    let expiryHTML='';
-    if(st===2){
-      let badgeClass='', badgeText='';
-      if(exp){
-        const days=Math.round((new Date(exp)-new Date())/(1000*60*60*24));
-        if(days<0){badgeClass='exp-danger';badgeText=lang==='zh'?'已過期':'Expired';}
-        else if(days<=30){badgeClass='exp-warn';badgeText=lang==='zh'?`${days}天後到期`:`Expires in ${days}d`;}
-        else{badgeClass='exp-ok';badgeText=lang==='zh'?`${days}天後到期`:`${days}d left`;}
-      }
-      expiryHTML=`<div class="item-expiry-row">
-        <span class="expiry-label">${t('expiryLbl')}</span>
-        <input class="expiry-input" type="date" value="${exp}" onchange="setExpiry('${key}',this.value)" onclick="event.stopPropagation()">
-        ${exp?`<span class="expiry-badge ${badgeClass}">${badgeText}</span>`:''}
-      </div>`;
-    }
-
-    const row = document.createElement('div');
-    row.className=`item-row ${stateClass} ${it.pri?'priority-high':''}`;
-    row.dataset.key=key;
-    row.innerHTML=`
-      <button class="state-btn ${btnClass}" onclick="cycleState('${key}',event)" title="Click to cycle: Not ready → Need to buy → Have it">${btnIcon}</button>
-      <div class="item-body">
-        <div class="item-name">${name}</div>
-        ${note?`<div class="item-note">${note}</div>`:''}
-        ${expiryHTML}
-      </div>
-      ${info?`<button class="info-trigger" onclick="toggleInfo(this,event)" tabindex="0">i</button><div class="info-popup">${info}</div>`:''}
-      ${it.custom?`<button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:2px 6px;" onclick="removeCustom(${ci},'${key}',event)">✕</button>`:''}`;
-    cont.appendChild(row);
-  });
-
-  updateBadge(ci);
-}
-
-function updateBadge(ci){
-  const rows = document.querySelectorAll(`#items-${ci} .item-row`);
-  const done = [...rows].filter(r=>r.classList.contains('is-have')).length;
-  const el = document.getElementById('badge-'+ci);
-  if(el) el.textContent=`${done}/${rows.length}`;
-}
-
-function cycleState(key, e){
-  e.stopPropagation();
-  itemStates[key]=((itemStates[key]||0)+1)%3;
-  // re-render items for this cat
-  const ci = key.split('-')[0];
-  const cats=getCategories();
-  if(cats[ci]) renderItems(parseInt(ci),cats[ci].items);
-  updateRing();
-  updateShopList();
-  autoSave();
-}
-
-function setExpiry(key,val){
-  itemExpiry[key]=val;
-  autoSave();
-  // refresh to show badge
-  const ci=parseInt(key.split('-')[0]);
-  const cats=getCategories();
-  if(cats[ci]) renderItems(ci,cats[ci].items);
-}
-
-function toggleCat(ci){
-  document.getElementById('cat-'+ci).classList.toggle('collapsed');
-}
-
-function toggleInfo(btn,e){
-  e.stopPropagation();
-  btn.classList.toggle('open');
-}
-
-function addCustom(ci){
-  const inp=document.getElementById('ci-'+ci);
-  const name=inp.value.trim();
-  if(!name)return;
-  if(!customItems[ci]) customItems[ci]=[];
-  const key=`custom-${ci}-${Date.now()}`;
-  customItems[ci].push({name,key});
-  inp.value='';
-  const cats=getCategories();
-  renderItems(ci,cats[ci].items);
-  updateRing();
-  autoSave();
-}
-
-function removeCustom(ci,key,e){
-  e.stopPropagation();
-  if(customItems[ci]) customItems[ci]=customItems[ci].filter(c=>c.key!==key);
-  delete itemStates[key]; delete itemExpiry[key];
-  const cats=getCategories();
-  renderItems(ci,cats[ci].items);
-  updateRing();
-  autoSave();
-}
-
-// ═══════════════════════════════════════════════════════
-// RING & SHOP
-// ═══════════════════════════════════════════════════════
-function updateRing(){
-  const all=document.querySelectorAll('.item-row');
-  const done=[...all].filter(r=>r.classList.contains('is-have')).length;
-  const pct=all.length?Math.round(done/all.length*100):0;
-  const circ=163.4;
-  document.getElementById('ringFill').style.strokeDashoffset=circ-(circ*pct/100);
-  document.getElementById('ringNum').textContent=pct+'%';
-  document.getElementById('progDesc').textContent=`${done} ${t('checkedOf')} ${all.length} ${t('items')}`;
-}
-
-function updateShopList(){
-  const items=[...document.querySelectorAll('.item-row.need-buy')];
-  const cnt=items.length;
-  document.getElementById('shopCount').textContent=cnt?`(${cnt})`:'';
-  const list=document.getElementById('shopList');
-  if(!cnt){ list.innerHTML=`<p class="shop-empty">${t('shopEmpty')}</p>`; return; }
-  list.innerHTML=items.map(r=>{
-    const name=r.querySelector('.item-name').textContent.replace(/^🛒 /,'');
-    return`<div class="shop-item">🛒 ${name}</div>`;
-  }).join('');
-}
-
-function toggleShop(){
-  shopOpen=!shopOpen;
-  document.getElementById('shopList').classList.toggle('on',shopOpen);
-  document.getElementById('shopChevron').textContent=shopOpen?'▲':'▼';
-  if(shopOpen) updateShopList();
-}
-
-// ═══════════════════════════════════════════════════════
-// SAVE / LOAD
-// ═══════════════════════════════════════════════════════
-function getFullData(){
-  return JSON.stringify({
-    v:2, lang, ST, itemStates, itemExpiry, customItems,
-    contacts:{ ec1:document.getElementById('ec1')?.value||'', ec2:document.getElementById('ec2')?.value||'', ec3:document.getElementById('ec3')?.value||'', ec4:document.getElementById('ec4')?.value||'' }
-  });
-}
-
-function autoSave(){
-  try{ localStorage.setItem('prepready_v2',getFullData()); } catch(e){}
-}
-
-function restoreEcContacts(){
-  try{
-    const d=JSON.parse(localStorage.getItem('prepready_v2')||'{}');
-    if(d.contacts){ ['ec1','ec2','ec3','ec4'].forEach(k=>{ const el=document.getElementById(k); if(el&&d.contacts[k]) el.value=d.contacts[k]; }); }
-  }catch(e){}
-}
-
-function loadSaved(){
-  try{
-    const raw=localStorage.getItem('prepready_v2');
-    if(!raw) return false;
-    const d=JSON.parse(raw);
-    if(d.ST) Object.assign(ST,d.ST);
-    if(d.itemStates) itemStates=d.itemStates;
-    if(d.itemExpiry) itemExpiry=d.itemExpiry;
-    if(d.customItems) customItems=d.customItems;
-    if(d.lang) lang=d.lang;
-    return true;
-  }catch(e){ return false; }
-}
-
-// ═══════════════════════════════════════════════════════
-// ACTIONS
-// ═══════════════════════════════════════════════════════
-function exportData(){
-  const data=getFullData();
-  document.getElementById('modalTitle').textContent=t('modalExportTitle');
-  document.getElementById('modalDesc').textContent=t('modalExportDesc');
-  document.getElementById('modalTA').value=data;
-  document.getElementById('modalAction').textContent=t('modalCopy');
-  document.getElementById('modalAction').onclick=()=>{ navigator.clipboard?.writeText(data).catch(()=>{}); document.getElementById('modalTA').select(); document.execCommand('copy'); showToast(t('toastCopied')); };
-  document.getElementById('modalBg').classList.add('on');
-}
-
-function showImport(){
-  document.getElementById('modalTitle').textContent=t('modalImportTitle');
-  document.getElementById('modalDesc').textContent=t('modalImportDesc');
-  document.getElementById('modalTA').value='';
-  document.getElementById('modalAction').textContent=t('modalImport');
-  document.getElementById('modalAction').onclick=()=>{
-    try{
-      const d=JSON.parse(document.getElementById('modalTA').value);
-      if(d.ST) Object.assign(ST,d.ST);
-      if(d.itemStates) itemStates=d.itemStates;
-      if(d.itemExpiry) itemExpiry=d.itemExpiry;
-      if(d.customItems) customItems=d.customItems;
-      closeModal();
-      buildResult();
-      showToast(t('toastImported'));
-    }catch(e){ alert('Invalid backup code'); }
-  };
-  document.getElementById('modalBg').classList.add('on');
-}
-
-function closeModal(e){
-  if(!e||e.target===document.getElementById('modalBg')) document.getElementById('modalBg').classList.remove('on');
-}
-
-function shareList(){
-  const cats=getCategories();
-  let text=`🚨 Emergency Prep List (PrepReady)\n\n`;
-  cats.forEach(c=>{ text+=`${c.icon} ${lang==='zh'?c.nameZh:c.nameEn}\n`; c.items.forEach(it=>{ text+=`  □ ${lang==='zh'?it.nameZh:it.nameEn}\n`; }); text+='\n'; });
-  text+=`\nCreated with PrepReady by Billion Studio\nhttps://billionstudio.co.uk`;
-  if(navigator.share){ navigator.share({title:'Emergency Prep List',text}).then(()=>showToast(t('toastShared'))).catch(()=>{}); }
-  else{ navigator.clipboard?.writeText(text).then(()=>showToast(t('toastCopied'))).catch(()=>{}); }
-}
-
-function downloadICS(){
-  const now=new Date();
-  const fut=new Date(now); fut.setMonth(fut.getMonth()+6);
-  const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-  const ics=`BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//PrepReady//Billion Studio//EN\nBEGIN:VEVENT\nUID:prepready-${Date.now()}@billionstudio\nDTSTAMP:${fmt(now)}\nDTSTART:${fmt(fut)}\nSUMMARY:${t('icsTitle')}\nDESCRIPTION:${t('icsNote')}\nEND:VEVENT\nEND:VCALENDAR`;
-  const blob=new Blob([ics],{type:'text/calendar'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='prepready-reminder.ics'; a.click();
-  showToast(t('reminderSet'));
-}
-
-function resetAll(){
-  if(!confirm(lang==='zh'?'確定要重新開始？進度將清除。':'Start over? Your progress will be cleared.')) return;
-  ST={members:2,ages:{infant:0,child:0,adult:2,elder:0},threats:[],needs:[],duration:7};
-  itemStates={}; itemExpiry={}; customItems={};
-  document.getElementById('sResult').classList.remove('on');
-  document.getElementById('memberNum').textContent='2';
-  ['infant','child','adult','elder'].forEach(g=>{ document.getElementById('a-'+g).textContent=g==='adult'?'2':'0'; }); ST.ages.adult=2;
-  document.querySelectorAll('.t-card,.need-chip').forEach(c=>c.classList.remove('sel'));
-  document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('sel'));
-  document.getElementById('d-7').classList.add('sel');
-  curStep=1;
-  document.getElementById('heroSection').style.display='block';
-  document.getElementById('progTrack').style.display='none';
-  document.getElementById('s1').classList.add('on');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function showToast(msg,dur=2200){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
-}
-
-// ═══════════════════════════════════════════════════════
-// LANGUAGE & THEME
-// ═══════════════════════════════════════════════════════
-function setLang(l){
-  lang=l;
-  document.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.toggle('active',b.textContent===(l==='en'?'EN':'繁中')));
-  document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.dataset.i18n; if(T[l][k]!==undefined) el.innerHTML=T[l][k]; });
-  if(document.getElementById('sResult').classList.contains('on')){ renderResult(); restoreEcContacts(); }
-  autoSave();
-}
-
-function toggleTheme(){
-  theme=theme==='dark'?'light':'dark';
-  document.documentElement.dataset.theme=theme;
-  document.getElementById('themeBtn').textContent=theme==='dark'?'☀️':'🌙';
-  autoSave();
-}
-
-// EC contact auto-save
-document.addEventListener('input',e=>{ if(e.target.classList.contains('ec-inp')) autoSave(); });
-
-// ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
-window.addEventListener('load',()=>{
-  loadSaved();
-  // Apply saved theme
-  if(theme==='light'){ document.documentElement.dataset.theme='light'; document.getElementById('themeBtn').textContent='🌙'; }
+document.querySelector('.lang').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setLang(b.dataset.l)});
+document.querySelector('.panel').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.k){const k=b.dataset.k,min=k==='a'?1:0;S[k]=Math.min(12,Math.max(min,S[k]+ +b.dataset.v))}
+  else if(b.dataset.d)S.d=+b.dataset.d;
+  else if(b.dataset.t){const k=b.dataset.t;S.t=S.t.includes(k)?S.t.filter(x=>x!==k):[...S.t,k]}
+  else if(b.dataset.s){const k=b.dataset.s;S.s=S.s.includes(k)?S.s.filter(x=>x!==k):[...S.s,k]}
+  controls();render();save();
 });
+$('list').addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;if(e.target.checked)S.done[id]=1;else delete S.done[id];render();save()});
+$('contact').addEventListener('input',e=>{const k=e.target.dataset.ct;if(k){S.ct[k]=e.target.value;save()}});
+$('bReset').addEventListener('click',()=>{S.done={};render();save();toast(L('Ticks cleared','已清除剔選'))});
+$('bPrint').addEventListener('click',()=>{try{window.print()}catch(e){toast(L('Printing is blocked here — try Copy list','此處無法列印，請改用「複製清單」'))}});
+$('bCopy').addEventListener('click',async()=>{
+  const items=active();const txt=[L('PrepReady checklist','PrepReady 備災清單'),$('sum').textContent,''].concat(items.map(it=>`${S.done[it.id]?'[x]':'[ ]'} ${it.name}${it.q?' — '+it.q:''}`)).join('\n');
+  try{await navigator.clipboard.writeText(txt);toast(L('Checklist copied','已複製清單'))}catch(e){toast(L('Copy was blocked by the browser','瀏覽器阻止了複製'))}
+});
+$('bCal').addEventListener('click',()=>{
+  const d=new Date();d.setMonth(d.getMonth()+6);const f=d.toISOString().slice(0,10).replace(/-/g,'');
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Billion Studio//PrepReady//EN','BEGIN:VEVENT','UID:prepready-'+Date.now()+'@billionstudio.app','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART;VALUE=DATE:'+f,'RRULE:FREQ=MONTHLY;INTERVAL=6','SUMMARY:'+L('Check emergency kit (PrepReady)','檢查備災物資 (PrepReady)'),'DESCRIPTION:'+L('Check expiry dates, recharge power banks, update your list.','檢查有效日期、為充電寶充電、更新清單。'),'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='prepready-reminder.ics';document.body.appendChild(a);a.click();a.remove();toast(L('Calendar reminder downloaded','已下載日曆提醒'))}catch(e){toast(L('Download blocked here','此處無法下載'))}
+});
+setLang(S.lang);
+}
 </script>
 </body>
 </html>
