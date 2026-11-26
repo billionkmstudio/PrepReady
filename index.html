@@ -120,6 +120,17 @@ details.shop summary{font-weight:700;cursor:pointer;min-height:28px}
 .ditem input:checked{background:var(--sig);border-color:var(--sig)}
 .ditem input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
 .ditem b{display:block;font-size:16.5px}.ditem p{margin:3px 0 0;font-size:15px}.ditem a{color:#ffb38f}
+.ladder{grid-column:1/-1;margin-top:8px}
+.ladder h3{font-size:20px;margin:0 0 4px}
+.lgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}
+.lcard{border-radius:18px;padding:18px;background:color-mix(in srgb,var(--bg) 8%,transparent);border:1.5px solid color-mix(in srgb,var(--bg) 14%,transparent)}
+.lcard .lv{display:inline-block;font-size:12.5px;font-weight:800;color:#fff;background:var(--sig);border-radius:8px;padding:2px 8px;margin-bottom:10px}
+.lcard h4{margin:0 0 2px;font-size:17px}.lcard .ex{font-size:14px;margin:0 0 10px}
+.lcard dl{margin:0;font-size:14px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px}
+.lcard dt{font-weight:700;opacity:.65}.lcard dd{margin:0}
+.ltip{margin:14px 0 0;font-size:14.5px;padding:12px 16px;border-radius:14px;background:color-mix(in srgb,var(--sig) 22%,transparent)}
+@media (max-width:980px){.lgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.lgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:760px){.dpanel{grid-template-columns:minmax(0,1fr)}}
 /* numbers */
 .nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:28px}
@@ -277,7 +288,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
 
 <footer><div class="wrap">
   <span><span class="en">Free for everyone. Nothing you enter leaves your device. This site is independent and not run by the UK Government.</span><span class="zh">免費使用，你輸入的資料不會離開你的裝置。本站為獨立網站，並非英國政府營運。</span></span>
-  <span>© <a href="https://billionstudio.co.uk" rel="noopener">Billion Studio</a> 2026 · PrepReady v3.1</span>
+  <span>© <a href="https://billionstudio.co.uk" rel="noopener">Billion Studio</a> 2026 · PrepReady v3.2</span>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
 
@@ -354,6 +365,15 @@ const DIG=[
  ['n4','Save key files to your phone and print them','把重要文件存入手機並打印','Home insurance policy and claim number, tenancy or mortgage details, NHS numbers, repeat prescriptions, vet and GP details.','家居保險單及索償電話、租約或按揭資料、NHS 號碼、長期處方、獸醫及家庭醫生資料。'],
  ['n5','Agree a no-signal plan','約定「冇訊號」計劃','If phones are down: where everyone goes, and a fixed check-in time (e.g. the meeting point at 6pm).','電話不通時：各人去哪裡集合，定一個固定時間（例如晚上 6 點到集合點）。']
 ]],
+['mesh','Off-grid messaging','離線通訊','Talk to family with no 4G and no Wi-Fi','冇 4G、冇 Wi-Fi 都可以同家人聯絡','When masts lose power, phones show “No service”. These tools pass messages phone-to-phone, by radio or via satellite — but only if you set them up before you need them.','電訊基站一停電，手機就會顯示「冇服務」。以下工具可以手機直接傳手機、經無線電或者經衛星傳訊息——但一定要事前裝好、試好。','M10 5a2 2 0 1 0 4 0a2 2 0 1 0-4 0M3 19a2 2 0 1 0 4 0a2 2 0 1 0-4 0M17 19a2 2 0 1 0 4 0a2 2 0 1 0-4 0M11 7l-5 10M13 7l5 10M7 19h10',[
+ ['m1','Install the same Bluetooth mesh app on every family phone — now','而家就喺每部家人手機裝同一個藍牙 mesh App','Bitchat or Bridgefy (iPhone and Android) relay messages from phone to phone with no signal. Everyone needs the same app installed before the outage — you can’t download it afterwards. Bitchat hasn’t had an independent security audit yet, so don’t send passwords or bank details.','Bitchat 或 Bridgefy（iPhone 同 Android 都有）可以喺冇訊號時，經附近手機一部傳一部。全家要喺斷網之前裝好同一個 App——斷咗網就下載唔到。Bitchat 暫時未經獨立安全審計，唔好用嚟傳密碼或銀行資料。','https://bitchat.free/'],
+ ['m2','Do a practice run at home','喺屋企試一次','Turn on Airplane mode, then switch Bluetooth back on. Send a message from upstairs to downstairs, then from the end of the street. Each phone only reaches a short distance, so more phones nearby means more range.','開飛行模式，再自己開返藍牙。由樓上傳去樓下，再試吓由街尾傳返屋企。每部手機只覆蓋好短距離，附近用同一個 App 嘅人越多，傳得越遠。'],
+ ['m3','Know your phone’s satellite feature','認識你手機嘅衛星功能','iPhone 14 or later: Emergency SOS via satellite — try the Demo in Settings → Emergency SOS. Some newer Android phones have satellite SOS too. O2 customers may get O2 Satellite in areas with no masts. You need a clear view of the sky.','iPhone 14 或之後：「透過衛星發出 SOS」——可以喺「設定 → SOS 緊急求救」試用示範模式。部分新款 Android 手機都有衛星 SOS。O2 用戶喺冇基站覆蓋嘅地方可能用到 O2 Satellite。要喺見到天空嘅地方先用到。','https://support.apple.com/en-gb/101573'],
+ ['m4','Remember: 999 can use any network','記住：999 可以經任何網絡打出','If your own network has no signal but another one does, your phone can still connect a 999 call. Try even if the screen says “SOS only” or “No service”.','如果你自己嘅網絡冇訊號，但其他網絡有，手機仍然可以接通 999。就算畫面顯示「只限 SOS」或「冇服務」，都要試。'],
+ ['m5','Get a pair of PMR446 walkie-talkies','買一對 PMR446 對講機','Licence-free in the UK and run on AA batteries, so they work when everything else is down. Agree a channel now (e.g. channel 3) and write it on your contact card.','喺英國免牌照使用，用 AA 電池，其他嘢全部停晒都仲用得。而家就約定好頻道（例如第 3 台），寫喺緊急聯絡卡上面。'],
+ ['m6','Optional: set up Meshtastic for longer range','進階：用 Meshtastic 做長距離通訊','A small LoRa radio paired to your phone by Bluetooth can send texts for kilometres with no network. In the UK buy the 868 MHz version. The default channel is public — create a private channel for your family.','一粒細細嘅 LoRa 無線電經藍牙連手機，冇網絡都可以傳文字訊息去幾公里外。英國要買 868 MHz 版本。預設頻道係公開嘅——要自己開一個家人專用嘅私人頻道。','https://meshtastic.org/'],
+ ['m7','Write your off-grid plan on paper','將離線通訊計劃寫喺紙上','Which app, which radio channel, and when to check in (e.g. switch on the radio on the hour for 5 minutes to save battery).','用邊個 App、對講機用邊個頻道、幾時開機聯絡（例如每個鐘頭開機 5 分鐘，慳電）。']
+],1],
 ['pay','Card payments down','拍卡／網上銀行停頓','When you can’t tap or bank online','當拍唔到卡、上唔到網銀','Outages and cyber attacks can stop card machines, cash machines and banking apps at the same time.','系統故障或網絡攻擊可以令拍卡機、提款機同銀行 App 同時停擺。','M2 7h20v10H2zM2 11h20M6 15h3',[
  ['p1','Keep cash in small notes and coins','預備散紙及硬幣','Enough for a few days of food, fuel or a taxi — shops may switch to cash only.','足夠幾日買食物、入油或坐的士——商店可能只收現金。'],
  ['p2','Carry a second card from a different bank','準備另一間銀行的卡','Outages often hit one bank at a time, so a second account keeps you paying.','故障通常只影響一間銀行，有第二個戶口就仍然可以付款。'],
@@ -439,7 +459,16 @@ function digital(){
   if(!DIG.some(d=>d[0]===S.tab))S.tab=DIG[0][0];
   $('dtabs').innerHTML=DIG.map(d=>`<button class="dtab" role="tab" data-tab="${d[0]}" aria-selected="${S.tab===d[0]}">${L(d[1],d[2])}<small>${d[8].filter(i=>S.dg[i[0]]).length}/${d[8].length}</small></button>`).join('');
   const d=DIG.find(d=>d[0]===S.tab);
-  $('dpanel').innerHTML=`<div class="dside"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d[7]}"/></svg><h3>${L(d[3],d[4])}</h3><p class="dfade">${L(d[5],d[6])}</p></div><div>${d[8].map(i=>`<label class="ditem"><input type="checkbox" data-dg="${i[0]}" ${S.dg[i[0]]?'checked':''}><span><b>${L(i[1],i[2])}</b><p class="dfade">${L(i[3],i[4])}${i[5]?` <a href="${i[5]}" rel="noopener">${L('More','詳情')} ↗</a>`:''}</p></span></label>`).join('')}</div>`;
+  $('dpanel').innerHTML=`<div class="dside"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d[7]}"/></svg><h3>${L(d[3],d[4])}</h3><p class="dfade">${L(d[5],d[6])}</p></div><div>${d[8].map(i=>`<label class="ditem"><input type="checkbox" data-dg="${i[0]}" ${S.dg[i[0]]?'checked':''}><span><b>${L(i[1],i[2])}</b><p class="dfade">${L(i[3],i[4])}${i[5]?` <a href="${i[5]}" rel="noopener">${L('More','詳情')} ↗</a>`:''}</p></span></label>`).join('')}</div>${d[9]?ladder():''}`;
+}
+function ladder(){
+  const R=[
+   ['Bluetooth mesh apps','藍牙 mesh App','Bitchat, Bridgefy','Bitchat、Bridgefy','Short — relayed phone to phone','短——靠附近手機逐部轉傳','The same app on every phone','每部手機都要裝同一個 App','Free','免費'],
+   ['PMR446 walkie-talkies','PMR446 對講機','Licence-free in the UK','英國免牌照','Up to a few km in the open, less in town','空曠地方可達幾公里，市區較短','Batteries and an agreed channel','電池同約定好嘅頻道','About £30–60 a pair','一對大約 £30–60'],
+   ['LoRa radio','LoRa 無線電','Meshtastic','Meshtastic','Several km, further with relays','幾公里，有中繼可以更遠','A radio per person, paired to your phone (868 MHz)','每人一粒，經藍牙連手機（868 MHz）','From about £25 per radio','每粒由大約 £25 起'],
+   ['Satellite on your phone','手機衛星功能','iPhone SOS, O2 Satellite','iPhone 衛星 SOS、O2 Satellite','Anywhere with open sky','見到天空嘅地方都用到','A compatible phone or plan; mostly texts','要支援嘅手機或月費計劃，主要係文字','Often included','通常已包括']
+  ];
+  return `<div class="ladder"><h3>${L('Four layers of backup','四層後備通訊')}</h3><p class="dfade" style="margin:0">${L('Each layer covers a different distance. Most families can start with layers 1 and 2.','每層覆蓋唔同距離。大部分家庭由第 1、2 層開始已經夠用。')}</p><div class="lgrid">${R.map((r,i)=>`<div class="lcard"><span class="lv">${L('Layer','第')} ${i+1}${L('',' 層')}</span><h4>${L(r[0],r[1])}</h4><p class="ex dfade">${L(r[2],r[3])}</p><dl><dt>${L('Range','距離')}</dt><dd>${L(r[4],r[5])}</dd><dt>${L('Needs','需要')}</dt><dd>${L(r[6],r[7])}</dd><dt>${L('Cost','費用')}</dt><dd>${L(r[8],r[9])}</dd></dl></div>`).join('')}</div><p class="ltip">${L('Test every layer once a year — for example on the same day you check your kit.','每年最少試一次每一層——例如揀檢查物資嗰日一齊試。')}</p></div>`;
 }
 function setLang(l){S.lang=l;document.documentElement.dataset.lang=l;document.documentElement.lang=l==='zh'?'zh-Hant':'en';document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===l));controls();contact();render();digital();save()}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2200)}
